@@ -47,12 +47,12 @@ Pliki nag³ówkowe i dokumentacja do %{name}.
 %patch0 -p1
 
 %build
-%{__aclocal}                                                                    
-%{__autoconf}                                                                   
+%{__aclocal}
+%{__autoconf}
 %configure \
 	--with-interface=ioctl \
 	--with-kernel-dir=%{_kernelsrcdir} \
-	--with-kernel-version=%{_kernel_ver} 
+	--with-kernel-version=%{_kernel_ver}
 %{__make}
 
 %install
