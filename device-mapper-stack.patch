@@ -1,0 +1,10 @@
+--- device-mapper.1.00.21/lib/ioctl/libdm-iface.c.orig	2005-01-07 16:39:53.000000000 +0100
++++ device-mapper.1.00.21/lib/ioctl/libdm-iface.c	2005-01-15 22:24:09.049566568 +0100
+@@ -218,7 +218,6 @@
+ 
+ #ifdef HAVE_SELINUX
+         if (!set_selinux_context(control)) {
+-                stack;
+                 return 0;
+         }
+ #endif
