@@ -12,6 +12,7 @@ URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libselinux-devel >= 1.10
+Requires:	libselinux >= 1.10
 Conflicts:	dev < 2.9.0-8
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
