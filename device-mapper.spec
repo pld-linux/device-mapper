@@ -79,12 +79,13 @@ ranlib libdevmapper.a
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/lib
+install -d $RPM_BUILD_ROOT{/%{_lib},%{_libdir}/%{name}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-mv -f $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.* $RPM_BUILD_ROOT/lib
+mv -f $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.* $RPM_BUILD_ROOT/%{_lib}
+cp -f scripts/* $RPM_BUILD_ROOT%{_libdir}/%{name}
 
 install libdevmapper.a $RPM_BUILD_ROOT%{_libdir}
 
@@ -98,7 +99,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc INTRO INSTALL README
 %attr(755,root,root) %{_sbindir}/*
-%attr(755,root,root) /lib/lib*.so.*.*
+%attr(755,root,root) /%{_lib}/lib*.so.*.*
+%dir %{_libdir}/%{name}
+%attr(755,root,root) %{_libdir}/%{name}/*
 %{_mandir}/man8/*
 
 %files devel
