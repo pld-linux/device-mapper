@@ -13,6 +13,7 @@ Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
 # Source0-md5:	c08c9478d7176a4ba2de1707baa41909
 Patch0:		%{name}-install.patch
 Patch1:		%{name}-opt.patch
+URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{!?with_dist_kernel:BuildRequires:	kernel-headers}
