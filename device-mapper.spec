@@ -6,7 +6,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	1.00.17
-Release:	1@%{_kernel_ver_str}
+Release:	2@%{_kernel_ver_str}
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -16,6 +16,7 @@ URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libselinux-devel >= 1.10
+Conflicts:	dev < 2.9.0-8
 %{!?with_dist_kernel:BuildRequires:	kernel-headers}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
