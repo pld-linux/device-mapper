@@ -1,13 +1,12 @@
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
-Version:	1.00.18
+Version:	1.00.19
 Release:	1
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
-# Source0-md5:	ff14891c9a717731289355c334056eb4
-Patch0:		%{name}-opt.patch
+# Source0-md5:	a7a97c469f22e3ec2cdcb5aae5603f3f
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -60,13 +59,13 @@ Statyczna biblioteka devmapper.
 
 %prep
 %setup -q -n %{name}.%{version}
-%patch0 -p1
 
 %build
 cp -f /usr/share/automake/config.sub autoconf
 %{__aclocal}
 %{__autoconf}
 %configure \
+	--with-optimisation="%{rpmcflags}" \
 	--with-user=$(id -u) \
 	--with-group=$(id -g) \
 	--with-interface=ioctl
