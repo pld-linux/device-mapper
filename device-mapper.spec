@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_without	dist_kernel	# without distribution kernel headers
+#
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
@@ -11,6 +15,7 @@ Patch0:		%{name}-install.patch
 Patch1:		%{name}-opt.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
+%{!?with_dist_kernel:BuildRequires:	kernel-headers}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
