@@ -1,8 +1,12 @@
+#
+# Conditional build:
+%bcond_without	selinux		# build without SELinux support
+#
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	1.00.19
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -10,8 +14,8 @@ Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	libselinux-devel >= 1.10
-Requires:	libselinux >= 1.10
+%{?with_selinux:BuildRequires:	libselinux-devel >= 1.10}
+%{?with_selinux:Requires:	libselinux >= 1.10}
 Conflicts:	dev < 2.9.0-8
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -65,6 +69,7 @@ cp -f /usr/share/automake/config.sub autoconf
 %{__aclocal}
 %{__autoconf}
 %configure \
+	SELINUX=%{?with_selinux:yes}%{!?with_selinux:no} \
 	--with-optimisation="%{rpmcflags}" \
 	--with-user=%(id -u) \
 	--with-group=%(id -g) \
