@@ -1,12 +1,12 @@
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
-Version:	1.00.17
-Release:	3
+Version:	1.00.18
+Release:	1
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
-# Source0-md5:	b74bb5fa232c77bf74f87eac2f53e1e4
+# Source0-md5:	ff14891c9a717731289355c334056eb4
 Patch0:		%{name}-opt.patch
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
