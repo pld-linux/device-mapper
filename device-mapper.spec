@@ -13,6 +13,7 @@ Source0:	ftp://ftp.sistina.com/pub/LVM2/device-mapper/%{name}.%{version}.tgz
 # Source0-md5:	44920cd973a6abc79109af9bff9d8af6
 Patch0:		%{name}-install.patch
 Patch1:		%{name}-opt.patch
+Patch2:		%{name}-errno.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{!?with_dist_kernel:BuildRequires:	kernel-headers}
@@ -64,6 +65,7 @@ Statyczna biblioteka devmapper.
 %setup -q -n %{name}.%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 cp -f /usr/share/automake/config.sub autoconf
