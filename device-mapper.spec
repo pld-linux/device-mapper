@@ -5,17 +5,17 @@
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
-Version:	1.00.09
+Version:	1.00.17
 Release:	1@%{_kernel_ver_str}
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
-# Source0-md5:	c08c9478d7176a4ba2de1707baa41909
-Patch0:		%{name}-install.patch
-Patch1:		%{name}-opt.patch
+# Source0-md5:	b74bb5fa232c77bf74f87eac2f53e1e4
+Patch0:		%{name}-opt.patch
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	libselinux-devel >= 1.10
 %{!?with_dist_kernel:BuildRequires:	kernel-headers}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -64,7 +64,6 @@ Statyczna biblioteka devmapper.
 %prep
 %setup -q -n %{name}.%{version}
 %patch0 -p1
-%patch1 -p1
 
 %build
 cp -f /usr/share/automake/config.sub autoconf
