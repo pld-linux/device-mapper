@@ -5,12 +5,12 @@
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
-Version:	1.00.07
+Version:	1.00.09
 Release:	0.1@%{_kernel_ver_str}
 License:	GPL
 Group:		Applications/System
-Source0:	ftp://ftp.sistina.com/pub/LVM2/device-mapper/%{name}.%{version}.tgz
-# Source0-md5:	44920cd973a6abc79109af9bff9d8af6
+Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
+# Source0-md5:	c08c9478d7176a4ba2de1707baa41909
 Patch0:		%{name}-install.patch
 Patch1:		%{name}-opt.patch
 BuildRequires:	autoconf
@@ -70,6 +70,8 @@ cp -f /usr/share/automake/config.sub autoconf
 %{__aclocal}
 %{__autoconf}
 %configure \
+	--with-user=$(id -u) \
+	--with-group=$(id -g) \
 	--with-interface=ioctl \
 	--with-kernel-version=%{_kernel_ver}
 %{__make}
