@@ -66,6 +66,7 @@ Statyczna biblioteka devmapper.
 %patch1 -p1
 
 %build
+cp -f /usr/share/automake/config.sub autoconf
 %{__aclocal}
 %{__autoconf}
 %configure \
