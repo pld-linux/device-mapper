@@ -1,51 +1,79 @@
-diff -ur device-mapper.0.96.08/dmsetup/Makefile.in device-mapper.0.96.08.bzz/dmsetup/Makefile.in
---- device-mapper.0.96.08/dmsetup/Makefile.in	Wed Jan  2 14:40:48 2002
-+++ device-mapper.0.96.08.bzz/dmsetup/Makefile.in	Tue Apr 15 17:38:28 2003
-@@ -17,7 +17,7 @@
- 	$(CC) -o dmsetup dmsetup.o $(LD_FLAGS) -ldevmapper
+diff -urN device-mapper.1.00.09.org/dmsetup/Makefile.in device-mapper.1.00.09/dmsetup/Makefile.in
+--- device-mapper.1.00.09.org/dmsetup/Makefile.in	2004-04-01 01:58:07.096597280 +0200
++++ device-mapper.1.00.09/dmsetup/Makefile.in	2004-04-01 02:01:38.120516768 +0200
+@@ -28,7 +28,7 @@
+ 	      -ldevmapper
  
  install: dmsetup
 -	$(INSTALL) -D -o $(OWNER) -g $(GROUP) -m 555 $(STRIP) $< $(sbindir)/$<
-+	$(INSTALL) -D -m 555 $(STRIP) $< $(DESTDIR)$(sbindir)/$<
++	$(INSTALL) -D -o $(OWNER) -g $(GROUP) -m 555 $(STRIP) $< $(DESTDIR)$(sbindir)/$<
  
  .PHONY: install 
  
-diff -ur device-mapper.0.96.08/lib/Makefile.in device-mapper.0.96.08.bzz/lib/Makefile.in
---- device-mapper.0.96.08/lib/Makefile.in	Tue Jan 21 22:22:55 2003
-+++ device-mapper.0.96.08.bzz/lib/Makefile.in	Tue Apr 15 17:37:46 2003
-@@ -20,17 +20,17 @@
+diff -urN device-mapper.1.00.09.org/lib/Makefile.in device-mapper.1.00.09/lib/Makefile.in
+--- device-mapper.1.00.09.org/lib/Makefile.in	2004-04-01 01:58:07.179584664 +0200
++++ device-mapper.1.00.09/lib/Makefile.in	2004-04-01 02:02:30.597539048 +0200
+@@ -30,29 +30,29 @@
+ 
  
  install: install_@interface@
 -	$(LN_S) -f libdevmapper.so.$(LIB_VERSION) $(libdir)/libdevmapper.so
--	$(INSTALL) -D -o $(OWNER) -g $(GROUP) -m 444 libdevmapper.h \
++	$(LN_S) -f libdevmapper.so.$(LIB_VERSION) $(DESTDIR)$(libdir)/libdevmapper.so
+ 	$(INSTALL) -D -o $(OWNER) -g $(GROUP) -m 444 libdevmapper.h \
 -		$(includedir)/libdevmapper.h
-+	$(LN_S) -f /lib/libdevmapper.so.$(LIB_VERSION) $(DESTDIR)$(libdir)/libdevmapper.so
-+	$(INSTALL) -D -m 444 libdevmapper.h \
 +		$(DESTDIR)$(includedir)/libdevmapper.h
  
- .PHONY: install install_@interface@
+ install_static: install_@interface@_static
+-	$(LN_S) -f libdevmapper.a.$(LIB_VERSION) $(libdir)/libdevmapper.a
++	$(LN_S) -f libdevmapper.a.$(LIB_VERSION) $(DESTDIR)$(libdir)/libdevmapper.a
+ 	$(INSTALL) -D -o $(OWNER) -g $(GROUP) -m 444 libdevmapper.h \
+-		$(includedir)/libdevmapper.h
++		$(DESTDIR)$(includedir)/libdevmapper.h
+ 
+ 
+ .PHONY: install install_@interface@ install_static install_@interface@_static
  
  install_fs: fs/libdevmapper.so
--	$(INSTALL) -D -o $(OWNER) -g $(GROUP) -m 555 $(STRIP) $< \
+ 	$(INSTALL) -D -o $(OWNER) -g $(GROUP) -m 555 $(STRIP) $< \
 -		$(libdir)/libdevmapper.so.$(LIB_VERSION)
-+	$(INSTALL) -D -m 555 $(STRIP) $< \
 +		$(DESTDIR)$(libdir)/libdevmapper.so.$(LIB_VERSION)
  
  install_ioctl: ioctl/libdevmapper.so
--	$(INSTALL) -D -o $(OWNER) -g $(GROUP) -m 555 $(STRIP) $< \
+ 	$(INSTALL) -D -o $(OWNER) -g $(GROUP) -m 555 $(STRIP) $< \
 -		$(libdir)/libdevmapper.so.$(LIB_VERSION)
-+	$(INSTALL) -D -m 555 $(STRIP) $< \
 +		$(DESTDIR)$(libdir)/libdevmapper.so.$(LIB_VERSION)
  
+ install_ioctl_static: ioctl/libdevmapper.a
+ 	$(INSTALL) -D -o $(OWNER) -g $(GROUP) -m 555 $(STRIP) $< \
+-		$(libdir)/libdevmapper.a.$(LIB_VERSION)
++		$(DESTDIR)$(libdir)/libdevmapper.a.$(LIB_VERSION)
+ 
  distclean_lib: 
-diff -ur device-mapper.0.96.08/man/Makefile.in device-mapper.0.96.08.bzz/man/Makefile.in
---- device-mapper.0.96.08/man/Makefile.in	Wed Jan  2 14:40:49 2002
-+++ device-mapper.0.96.08.bzz/man/Makefile.in	Tue Apr 15 17:37:55 2003
-@@ -30,6 +30,6 @@
+ 	$(RM) libdm-common.h
+diff -urN device-mapper.1.00.09.org/make.tmpl.in device-mapper.1.00.09/make.tmpl.in
+--- device-mapper.1.00.09.org/make.tmpl.in	2004-04-01 01:58:07.094597584 +0200
++++ device-mapper.1.00.09/make.tmpl.in	2004-04-01 02:03:19.789060800 +0200
+@@ -27,8 +27,8 @@
+ LD_DEPS += @LD_DEPS@
+ 
+ # Setup directory variables
+-prefix = $(DESTDIR)@prefix@
+-exec_prefix = $(DESTDIR)@exec_prefix@
++prefix = @prefix@
++exec_prefix = @exec_prefix@
+ bindir = @bindir@
+ includedir = @includedir@
+ libdir = @libdir@
+diff -urN device-mapper.1.00.09.org/man/Makefile.in device-mapper.1.00.09/man/Makefile.in
+--- device-mapper.1.00.09.org/man/Makefile.in	2004-04-01 01:58:07.195582232 +0200
++++ device-mapper.1.00.09/man/Makefile.in	2004-04-01 02:02:45.565263608 +0200
+@@ -25,7 +25,7 @@
+ 	@echo "*** Installing $(ALL_MANUALS) in $(MAN8DIR) ***"
  	@for f in $(MANUALS); \
  	do \
- 	   $(RM) $(MAN8DIR)/$$f; \
+-	   $(RM) $(MAN8DIR)/$$f; \
 -	   @INSTALL@ -D -o $(OWNER) -g $(GROUP) -m 444 $$f $(MAN8DIR)/$$f; \
-+	   @INSTALL@ -D -m 444 $$f $(DESTDIR)$(MAN8DIR)/$$f; \
++	   $(RM) $(DESTDIR)$(MAN8DIR)/$$f; \
++	   @INSTALL@ -D -o $(OWNER) -g $(GROUP) -m 444 $$f $(DESTDIR)$(MAN8DIR)/$$f; \
  	done
  
