@@ -1,4 +1,3 @@
-# TODO: optflags
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
@@ -9,6 +8,7 @@ Group:		Applications/System
 Source0:	ftp://ftp.sistina.com/pub/LVM2/device-mapper/%{name}.%{version}.tgz
 # Source0-md5:	44920cd973a6abc79109af9bff9d8af6
 Patch0:		%{name}-install.patch
+Patch1:		%{name}-opt.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -58,6 +58,7 @@ Statyczna biblioteka devmapper.
 %prep
 %setup -q -n %{name}.%{version}
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__aclocal}
