@@ -2,7 +2,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	0.96.08
-Release:	0.1
+Release:	0.1@%{_kernel_ver_str}
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://ftp.sistina.com/pub/LVM2/device-mapper/%{name}.%{version}.tgz
@@ -48,7 +48,10 @@ Pliki nag³ówkowe i dokumentacja do %{name}.
 %build
 %{__aclocal}                                                                    
 %{__autoconf}                                                                   
-%configure
+%configure \
+	--with-interface=ioctl \
+	--with-kernel-dir=%{_kernelsrcdir} \
+	--with-kernel-version=%{_kernel_ver} 
 %{__make}
 
 %install
