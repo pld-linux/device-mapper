@@ -66,8 +66,8 @@ cp -f /usr/share/automake/config.sub autoconf
 %{__autoconf}
 %configure \
 	--with-optimisation="%{rpmcflags}" \
-	--with-user=$(id -u) \
-	--with-group=$(id -g) \
+	--with-user=%(id -u) \
+	--with-group=%(id -g) \
 	--with-interface=ioctl
 %{__make}
 
@@ -105,7 +105,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so
+%attr(755,root,root) %{_libdir}/libdevmapper.so
 %{_includedir}/*.h
 
 %files static
