@@ -1,3 +1,4 @@
+# TODO: optflags
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
@@ -43,12 +44,16 @@ Header files and development documentation for %{name}.
 Pliki nag³ówkowe i dokumentacja do %{name}.
 
 %package static
-Summary:	-
+Summary:	Static devmapper library
+Summary(pl):	Statyczna biblioteka devmapper
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 
 %description static
--
+Static devmapper library.
+
+%description static -l pl
+Statyczna biblioteka devmapper.
 
 %prep
 %setup -q -n %{name}.%{version}
@@ -75,7 +80,7 @@ install -d $RPM_BUILD_ROOT/lib
 
 mv -f $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.* $RPM_BUILD_ROOT/lib
 
-install libdevmapper.a $RPM_BUILD_ROOT%{_libdir}/
+install libdevmapper.a $RPM_BUILD_ROOT%{_libdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
