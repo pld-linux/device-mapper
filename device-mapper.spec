@@ -6,6 +6,7 @@ Release:	0.1@%{_kernel_ver_str}
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://ftp.sistina.com/pub/LVM2/device-mapper/%{name}.%{version}.tgz
+# Source0-md5:	480d3afc0b1179e93fe1720a82132534
 Patch0:		%{name}-install.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
