@@ -1,12 +1,8 @@
-#
-# Conditional build:
-%bcond_without	dist_kernel	# without distribution kernel headers
-#
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	1.00.17
-Release:	2@%{_kernel_ver_str}
+Release:	3
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -17,7 +13,6 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libselinux-devel >= 1.10
 Conflicts:	dev < 2.9.0-8
-%{!?with_dist_kernel:BuildRequires:	kernel-headers}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sbindir	/sbin
@@ -42,7 +37,7 @@ wolumenami.
 Summary:	Header files and development documentation for %{name}
 Summary(pl):	Pliki nag³ówkowe i dokumentacja do %{name}
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files and development documentation for %{name}.
@@ -54,7 +49,7 @@ Pliki nag³ówkowe i dokumentacja do %{name}.
 Summary:	Static devmapper library
 Summary(pl):	Statyczna biblioteka devmapper
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static devmapper library.
@@ -73,8 +68,7 @@ cp -f /usr/share/automake/config.sub autoconf
 %configure \
 	--with-user=$(id -u) \
 	--with-group=$(id -g) \
-	--with-interface=ioctl \
-	--with-kernel-version=%{_kernel_ver}
+	--with-interface=ioctl
 %{__make}
 
 ar cru libdevmapper.a lib/ioctl/*.o lib/*.o
