@@ -6,7 +6,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	1.00.09
-Release:	0.1@%{_kernel_ver_str}
+Release:	1@%{_kernel_ver_str}
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -86,6 +86,8 @@ install -d $RPM_BUILD_ROOT{/%{_lib},%{_libdir}/%{name}}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+SONAME=$(basename $(ls -1 $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*))
+ln -sf /%{_lib}/${SONAME} $RPM_BUILD_ROOT%{_libdir}/libdevmapper.so
 mv -f $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.* $RPM_BUILD_ROOT/%{_lib}
 cp -f scripts/* $RPM_BUILD_ROOT%{_libdir}/%{name}
 
