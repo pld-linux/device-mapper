@@ -1,0 +1,30 @@
+diff -Nur old/lib/ioctl/libdevmapper.c new/lib/ioctl/libdevmapper.c
+--- old/lib/ioctl/libdevmapper.c	2003-11-13 13:14:28.000000000 +0000
++++ new/lib/ioctl/libdevmapper.c	2004-03-05 13:42:59.000000000 +0000
+@@ -17,6 +17,7 @@
+ #include <unistd.h>
+ #include <fcntl.h>
+ #include <dirent.h>
++#include "/usr/include/linux/errno.h"
+ #include <errno.h>
+ #include <sys/stat.h>
+ #include <sys/ioctl.h>
+@@ -31,7 +32,6 @@
+ #  define MINOR(x) minor((x))
+ #  define MKDEV(x,y) makedev((x),(y))
+ #endif
+-
+ /*
+  * Ensure build compatibility.  
+  * The hard-coded versions here are the highest present 
+diff -Nur old/lib/libdm-common.c new/lib/libdm-common.c
+--- old/lib/libdm-common.c	2003-07-01 21:20:18.000000000 +0000
++++ new/lib/libdm-common.c	2004-03-05 13:43:24.000000000 +0000
+@@ -15,6 +15,7 @@
+ #include <sys/param.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
++#include "/usr/include/linux/errno.h"
+ #include <errno.h>
+ #include <linux/dm-ioctl.h>
+ #include <linux/kdev_t.h>
