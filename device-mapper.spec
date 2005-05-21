@@ -6,7 +6,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	1.01.02
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -83,7 +83,7 @@ ranlib libdevmapper.a
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/%{_lib},%{_libdir}/%{name}}
+install -d $RPM_BUILD_ROOT/%{_lib}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -91,7 +91,6 @@ install -d $RPM_BUILD_ROOT{/%{_lib},%{_libdir}/%{name}}
 SONAME=$(basename $(ls -1 $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*))
 ln -sf /%{_lib}/${SONAME} $RPM_BUILD_ROOT%{_libdir}/libdevmapper.so
 mv -f $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.* $RPM_BUILD_ROOT/%{_lib}
-cp -f scripts/* $RPM_BUILD_ROOT%{_libdir}/%{name}
 
 install libdevmapper.a $RPM_BUILD_ROOT%{_libdir}
 
@@ -103,11 +102,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc INTRO INSTALL README
+%doc INTRO INSTALL README scripts/*
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) /%{_lib}/lib*.so.*.*
-%dir %{_libdir}/%{name}
-%attr(755,root,root) %{_libdir}/%{name}/*
 %{_mandir}/man8/*
 
 %files devel
