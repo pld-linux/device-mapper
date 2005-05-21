@@ -66,14 +66,14 @@ Statyczna biblioteka devmapper.
 Summary:	Additional scripts
 Summary(pl):	Dodatkowe skrypty
 Group:		Applications/System
-Requires:	util-linux
 Requires:	%{name} = %{version}-%{release}
+Requires:	util-linux
 
 %description scripts
 Additional scripts.
 
 %description scripts -l pl
-Dodatkowe skrypty
+Dodatkowe skrypty.
 
 %prep
 %setup -q -n %{name}.%{version}
