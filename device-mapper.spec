@@ -62,6 +62,19 @@ Static devmapper library.
 %description static -l pl
 Statyczna biblioteka devmapper.
 
+%package scripts
+Summary:	Additional scripts
+Summary(pl):	Dodatkowe skrypty
+Group:		Applications/System
+Requires:	util-linux
+Requires:	%{name} = %{version}-%{release}
+
+%description scripts
+Additional scripts.
+
+%description scripts -l pl
+Dodatkowe skrypty
+
 %prep
 %setup -q -n %{name}.%{version}
 %patch0 -p1
@@ -83,7 +96,7 @@ ranlib libdevmapper.a
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/%{_lib}
+install -d $RPM_BUILD_ROOT/{%{_lib},%{_libdir}/%{name}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -91,6 +104,7 @@ install -d $RPM_BUILD_ROOT/%{_lib}
 SONAME=$(basename $(ls -1 $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*))
 ln -sf /%{_lib}/${SONAME} $RPM_BUILD_ROOT%{_libdir}/libdevmapper.so
 mv -f $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.* $RPM_BUILD_ROOT/%{_lib}
+install scripts/* $RPM_BUILD_ROOT/%{_libdir}/%{name}
 
 install libdevmapper.a $RPM_BUILD_ROOT%{_libdir}
 
@@ -115,3 +129,8 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
+
+%files scripts
+%defattr(644,root,root,755)
+%dir %{_libdir}/%{name}
+%{_libdir}/%{name}/*
