@@ -2,11 +2,7 @@
 # Conditional build:
 %bcond_without	selinux		# build without SELinux support
 %bcond_without	initrd		# don't build initrd version
-%bcond_with	glibc		# build glibc-based initrd version
 #
-%ifnarch %{ix86}
-%define with_glibc 1
-%endif
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
@@ -17,15 +13,15 @@ Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
 # Source0-md5:	10469034e2f1f1483fd3d80fb3883af2
 Patch0:		%{name}-stack.patch
+# http://www.redhat.com/archives/dm-devel/2005-March/msg00022.html
+Patch1:		%{name}-disable_dynamic_link.patch
+Patch2:		%{name}-klibc.patch
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.10}
 %{?with_selinux:Requires:	libselinux >= 1.10}
-%if %{with initrd}
-%{?with_glibc:BuildRequires:	glibc-static}
-%{?!with_glibc:BuildRequires:	uClibc-static}
-%endif
+%{?with_initrd:BuildRequires:	klibc}
 Conflicts:	dev < 2.9.0-8
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -84,6 +80,21 @@ Static devmapper library.
 %description static -l pl
 Statyczna biblioteka devmapper.
 
+%package initrd-devel
+Summary:	Static devmapper library and header files for initrd applications
+Summary(pl):	Statyczna biblioteka devmapper i jej pliki nag³ówkowe dla aplikacji initrd
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+Requires:	klibc
+
+%description initrd-devel
+Static devmapper library and its header files for initrd applications linked
+with klibc.
+
+%description initrd-devel -l pl
+Statyczna biblioteka devmapper oraz jej pliki nag³ówkowe dla aplikacji
+u¿ywanych w initrd, zlinkowana z klibc.
+
 %package scripts
 Summary:	Additional scripts
 Summary(pl):	Dodatkowe skrypty
@@ -100,6 +111,8 @@ Dodatkowe skrypty.
 %prep
 %setup -q -n %{name}.%{version}
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
 cp -f /usr/share/automake/config.sub autoconf
@@ -114,10 +127,13 @@ cp -f /usr/share/automake/config.sub autoconf
 	--with-group=%(id -g) \
 	--with-interface=ioctl \
 	--enable-static_link \
-	%{?!with_glibc:CC="%{_target_cpu}-uclibc-gcc"}
+	--disable-dynamic_link \
+	--enable-klibc \
+	CC="klcc"
 %{__make}
 
 cp -a dmsetup/dmsetup.static initrd-dmsetup
+cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper.a
 %{__make} clean
 %endif
 
@@ -126,7 +142,8 @@ cp -a dmsetup/dmsetup.static initrd-dmsetup
 	--with-optimisation="%{rpmcflags}" \
 	--with-user=%(id -u) \
 	--with-group=%(id -g) \
-	--with-interface=ioctl
+	--with-interface=ioctl \
+	--disable-klibc
 %{__make}
 
 ar cru libdevmapper.a lib/ioctl/*.o lib/*.o
@@ -134,7 +151,7 @@ ranlib libdevmapper.a
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{%{_lib},%{_libdir}/%{name}}
+install -d $RPM_BUILD_ROOT/{%{_lib},%{_libdir}/%{name},/usr/{%{_lib},include}/klibc}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -146,6 +163,8 @@ install scripts/* $RPM_BUILD_ROOT/%{_libdir}/%{name}
 
 install libdevmapper.a $RPM_BUILD_ROOT%{_libdir}
 %{?with_initrd:install initrd-dmsetup $RPM_BUILD_ROOT%{_sbindir}}
+%{?with_initrd:install initrd-libdevmapper.a $RPM_BUILD_ROOT/usr/%{_lib}/klibc/libdevmapper.a}
+%{?with_initrd:install include/libdevmapper.h $RPM_BUILD_ROOT/usr/include/klibc}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -177,3 +196,8 @@ rm -rf $RPM_BUILD_ROOT
 %files initrd
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/initrd-dmsetup
+
+%files initrd-devel
+%defattr(644,root,root,755)
+/usr/%{_lib}/klibc/libdevmapper.a
+/usr/include/klibc/libdevmapper.h
