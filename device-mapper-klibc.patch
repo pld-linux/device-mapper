@@ -1,0 +1,97 @@
+diff -durN -x '*~' device-mapper.1.01.03.orig/configure.in device-mapper.1.01.03/configure.in
+--- device-mapper.1.01.03.orig/configure.in	2005-06-13 16:07:29.000000000 +0200
++++ device-mapper.1.01.03/configure.in	2005-07-31 18:58:27.000000000 +0200
+@@ -62,7 +62,7 @@
+ AC_HEADER_STDC
+ AC_HEADER_TIME
+ 
+-AC_CHECK_HEADERS(ctype.h dirent.h errno.h fcntl.h getopt.h inttypes.h limits.h stdarg.h stdio.h stdlib.h string.h sys/ioctl.h sys/param.h sys/stat.h sys/types.h unistd.h,,AC_MSG_ERROR(bailing out))
++AC_CHECK_HEADERS(ctype.h dirent.h errno.h fcntl.h inttypes.h limits.h stdarg.h stdio.h stdlib.h string.h sys/ioctl.h sys/param.h sys/stat.h sys/types.h unistd.h,,AC_MSG_ERROR(bailing out))
+ 
+ ################################################################################
+ dnl -- Checks for typedefs, structures, and compiler characteristics.
+diff -durN -x '*~' device-mapper.1.01.03.orig/dmsetup/dmsetup.c device-mapper.1.01.03/dmsetup/dmsetup.c
+--- device-mapper.1.01.03.orig/dmsetup/dmsetup.c	2005-05-16 22:46:46.000000000 +0200
++++ device-mapper.1.01.03/dmsetup/dmsetup.c	2005-07-31 18:58:01.000000000 +0200
+@@ -26,7 +26,6 @@
+ #include <dirent.h>
+ #include <errno.h>
+ #include <unistd.h>
+-#include <libgen.h>
+ #include <sys/wait.h>
+ #include <unistd.h>
+ #include <sys/param.h>
+@@ -1051,7 +1050,9 @@
+ 	memset(&_values, 0, sizeof(_values));
+ 
+ 	namebase = strdup((*argv)[0]);
+-	base = basename(namebase);
++	base = strrchr(namebase,'/');
++	if (base != NULL) *base++ = 0;
++	else base = namebase;
+ 
+ 	if (!strcmp(base, "devmap_name")) {
+ 		free(namebase);
+diff -durN -x '*~' device-mapper.1.01.03.orig/lib/ioctl/libdm-iface.c device-mapper.1.01.03/lib/ioctl/libdm-iface.c
+--- device-mapper.1.01.03.orig/lib/ioctl/libdm-iface.c	2005-07-31 18:02:15.000000000 +0200
++++ device-mapper.1.01.03/lib/ioctl/libdm-iface.c	2005-07-31 18:58:01.000000000 +0200
+@@ -122,24 +122,30 @@
+ 			    uint32_t *number)
+ {
+ 	FILE *fl;
+-	char nm[256];
+-	int c;
++	char nm[256], buf[300];
++	int num, size;
+ 
+ 	if (!(fl = fopen(file, "r"))) {
+ 		log_error("%s: fopen failed: %s", file, strerror(errno));
+ 		return 0;
+ 	}
+ 
+-	while (!feof(fl)) {
+-		if (fscanf(fl, "%d %255s\n", number, &nm[0]) == 2) {
++	/* Use fread+sscanf for klibc compatibility. */
++	do {
++		size = 0;
++		do {
++			num = fread(&buf[size], sizeof(char), 1, fl);
++			if (num > 0)
++				size++;
++		} while (num > 0 && buf[size - 1] != '\n');
++		buf[size] = '\0';
++		if (sscanf(buf, "%d %255s\n", number, &nm[0]) == 2) {
+ 			if (!strcmp(name, nm)) {
+ 				fclose(fl);
+ 				return 1;
+ 			}
+-		} else do {
+-			c = fgetc(fl);
+-		} while (c != EOF && c != '\n');
+-	}
++		}
++	} while (num > 0);
+ 	fclose(fl);
+ 
+ 	log_error("%s: No entry for %s found", file, name);
+diff -durN -x '*~' device-mapper.1.01.03.orig/lib/libdm-file.c device-mapper.1.01.03/lib/libdm-file.c
+--- device-mapper.1.01.03.orig/lib/libdm-file.c	2005-01-27 17:16:54.000000000 +0100
++++ device-mapper.1.01.03/lib/libdm-file.c	2005-07-31 18:58:01.000000000 +0200
+@@ -16,12 +16,14 @@
+ #include "lib.h"
+ #include "libdm-file.h"
+ 
+-#include <sys/file.h>
+ #include <fcntl.h>
+ #include <dirent.h>
+ 
+-#ifdef linux
+-#  include <malloc.h>
++#ifndef __KLIBC__
++#  include <sys/file.h>
++#  ifdef linux
++#    include <malloc.h>
++#  endif
+ #endif
+ 
+ static int _create_dir_recursive(const char *dir)
