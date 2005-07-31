@@ -1,12 +1,17 @@
 #
 # Conditional build:
 %bcond_without	selinux		# build without SELinux support
+%bcond_without	initrd		# don't build initrd version
+%bcond_with	glibc		# build glibc-based initrd version
 #
+%ifnarch %{ix86}
+%define with_glibc 1
+%endif
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	1.01.03
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -17,6 +22,10 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.10}
 %{?with_selinux:Requires:	libselinux >= 1.10}
+%if %{with initrd}
+%{?with_glibc:BuildRequires:	glibc-static}
+%{?!with_glibc:BuildRequires:	uClibc-static}
+%endif
 Conflicts:	dev < 2.9.0-8
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -37,6 +46,19 @@ wykorzystane do definiowania partycji na dysku lub logicznych
 wolumenów. Ten lekki sk³adnik j±dra mo¿e wspieraæ dzia³aj±ce w
 przestrzeni u¿ytkownika narzêdzia do zarz±dzania logicznymi
 wolumenami.
+
+%package initrd
+Summary:	Userspace support for the device-mapper - static dmsetup for initrd
+Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika - statyczne dmsetup dla initrd
+Group:		Applications/System
+Requires:	%{name} = %{version}-%{release}
+
+%description initrd
+Userspace support for the device-mapper - static dmsetup binary for initrd.
+
+%description initrd -l pl
+Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika - statyczna wersja
+dmsetup dla initrd.
 
 %package devel
 Summary:	Header files and development documentation for %{name}
@@ -83,8 +105,24 @@ Dodatkowe skrypty.
 cp -f /usr/share/automake/config.sub autoconf
 %{__aclocal}
 %{__autoconf}
+
+%if %{with initrd}
 %configure \
-	SELINUX=%{?with_selinux:yes}%{!?with_selinux:no} \
+	--disable-selinux \
+	--with-optimisation="%{rpmcflags}" \
+	--with-user=%(id -u) \
+	--with-group=%(id -g) \
+	--with-interface=ioctl \
+	--enable-static_link \
+	%{?!with_glibc:CC="%{_target_cpu}-uclibc-gcc"}
+%{__make}
+
+cp -a dmsetup/dmsetup.static initrd-dmsetup
+%{__make} clean
+%endif
+
+%configure \
+	--%{?with_selinux:en}%{!?with_selinux:dis}able-selinux \
 	--with-optimisation="%{rpmcflags}" \
 	--with-user=%(id -u) \
 	--with-group=%(id -g) \
@@ -107,6 +145,7 @@ mv -f $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.* $RPM_BUILD_ROOT/%{_lib}
 install scripts/* $RPM_BUILD_ROOT/%{_libdir}/%{name}
 
 install libdevmapper.a $RPM_BUILD_ROOT%{_libdir}
+%{?with_initrd:install initrd-dmsetup $RPM_BUILD_ROOT%{_sbindir}}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -117,7 +156,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc INTRO INSTALL README scripts/*
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/dmsetup
 %attr(755,root,root) /%{_lib}/lib*.so.*.*
 %{_mandir}/man8/*
 
@@ -134,3 +173,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/*
+
+%files initrd
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_sbindir}/initrd-dmsetup
