@@ -50,11 +50,12 @@ Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
 %description initrd
-Userspace support for the device-mapper - static dmsetup binary for initrd.
+Userspace support for the device-mapper - static dmsetup binary for
+initrd.
 
 %description initrd -l pl
-Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika - statyczna wersja
-dmsetup dla initrd.
+Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika - statyczna
+wersja dmsetup dla initrd.
 
 %package devel
 Summary:	Header files and development documentation for %{name}
@@ -88,12 +89,12 @@ Requires:	%{name}-devel = %{version}-%{release}
 Requires:	klibc
 
 %description initrd-devel
-Static devmapper library and its header files for initrd applications linked
-with klibc.
+Static devmapper library and its header files for initrd applications
+linked with klibc.
 
 %description initrd-devel -l pl
-Statyczna biblioteka devmapper oraz jej pliki nag³ówkowe dla aplikacji
-u¿ywanych w initrd, zlinkowana z klibc.
+Statyczna, zlinkowana z klibc biblioteka devmapper oraz jej pliki
+nag³ówkowe dla aplikacji u¿ywanych w initrd.
 
 %package scripts
 Summary:	Additional scripts
