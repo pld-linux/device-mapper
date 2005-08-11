@@ -194,6 +194,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/%{name}
 %{_libdir}/%{name}/*
 
+%if %{with initrd}
 %files initrd
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/initrd-dmsetup
@@ -202,3 +203,4 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 /usr/%{_lib}/klibc/libdevmapper.a
 /usr/include/klibc/libdevmapper.h
+%endif
