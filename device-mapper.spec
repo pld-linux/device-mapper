@@ -6,12 +6,12 @@
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
-Version:	1.01.04
+Version:	1.01.05
 Release:	1
 License:	GPL
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
-# Source0-md5:	42dd0610e24d4b4f2409a32a04e6e37f
+# Source0-md5:	074cf116cc2c7194f2d100bc5f743833
 Patch0:		%{name}-stack.patch
 # http://www.redhat.com/archives/dm-devel/2005-March/msg00022.html
 Patch1:		%{name}-disable_dynamic_link.patch
@@ -21,7 +21,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.10}
 %{?with_selinux:Requires:	libselinux >= 1.10}
-%{?with_initrd:BuildRequires:	klibc}
+%{?with_initrd:BuildRequires:	klibc-static}
 Conflicts:	dev < 2.9.0-8
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -130,7 +130,7 @@ cp -f /usr/share/automake/config.sub autoconf
 	--enable-static_link \
 	--disable-dynamic_link \
 	--enable-klibc \
-	CC="klcc"
+	CC="klcc -static"
 %{__make}
 
 cp -a dmsetup/dmsetup.static initrd-dmsetup
