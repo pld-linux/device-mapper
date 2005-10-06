@@ -8,7 +8,7 @@ Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	1.01.05
 Release:	1
-License:	GPL
+License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
 # Source0-md5:	074cf116cc2c7194f2d100bc5f743833
