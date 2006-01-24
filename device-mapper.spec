@@ -7,7 +7,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	1.01.05
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -16,6 +16,7 @@ Patch0:		%{name}-stack.patch
 # http://www.redhat.com/archives/dm-devel/2005-March/msg00022.html
 Patch1:		%{name}-disable_dynamic_link.patch
 Patch2:		%{name}-klibc.patch
+Patch3:		%{name}-getopt.patch
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -114,6 +115,7 @@ Dodatkowe skrypty.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 cp -f /usr/share/automake/config.sub autoconf
@@ -140,7 +142,7 @@ cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper.a
 
 %configure \
 	--%{?with_selinux:en}%{!?with_selinux:dis}able-selinux \
-	--with-optimisation="%{rpmcflags}" \
+	--with-optimisation="%{rpmcflags} -DHAVE_GETOPTLONG" \
 	--with-user=%(id -u) \
 	--with-group=%(id -g) \
 	--with-interface=ioctl \

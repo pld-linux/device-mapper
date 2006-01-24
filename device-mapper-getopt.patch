@@ -1,0 +1,11 @@
+--- device-mapper.1.01.05/configure.in.orig	2006-01-24 22:48:51.000000000 +0100
++++ device-mapper.1.01.05/configure.in	2006-01-24 22:49:47.000000000 +0100
+@@ -208,7 +208,7 @@
+ 
+ ################################################################################
+ dnl -- Check for getopt
+-AC_CHECK_HEADERS(getopt.h, CFLAGS="$CFLAGS -DHAVE_GETOPTLONG")
++AC_CHECK_HEADERS(getopt.h)
+ 
+ ################################################################################
+ dnl -- Internationalisation stuff
