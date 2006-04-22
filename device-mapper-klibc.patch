@@ -1,6 +1,6 @@
-diff -ur device-mapper.1.02.05.org/configure.in device-mapper.1.02.05/configure.in
---- device-mapper.1.02.05.org/configure.in	2006-04-22 20:30:55.242324000 +0200
-+++ device-mapper.1.02.05/configure.in	2006-04-22 20:31:08.979182500 +0200
+diff -urN device-mapper.1.02.05.org/configure.in device-mapper.1.02.05/configure.in
+--- device-mapper.1.02.05.org/configure.in	2006-04-19 18:38:56.000000000 +0200
++++ device-mapper.1.02.05/configure.in	2006-04-22 20:55:32.442643250 +0200
 @@ -66,7 +66,7 @@
  AC_HEADER_STDC
  AC_HEADER_TIME
@@ -10,9 +10,9 @@ diff -ur device-mapper.1.02.05.org/configure.in device-mapper.1.02.05/configure.
  
  AC_CHECK_HEADERS(termios.h)
  ################################################################################
-diff -ur device-mapper.1.02.05.org/dmsetup/dmsetup.c device-mapper.1.02.05/dmsetup/dmsetup.c
+diff -urN device-mapper.1.02.05.org/dmsetup/dmsetup.c device-mapper.1.02.05/dmsetup/dmsetup.c
 --- device-mapper.1.02.05.org/dmsetup/dmsetup.c	2006-04-06 18:20:40.000000000 +0200
-+++ device-mapper.1.02.05/dmsetup/dmsetup.c	2006-04-22 20:31:08.995183500 +0200
++++ device-mapper.1.02.05/dmsetup/dmsetup.c	2006-04-22 20:55:57.180189250 +0200
 @@ -29,7 +29,6 @@
  #include <dirent.h>
  #include <errno.h>
@@ -21,7 +21,19 @@ diff -ur device-mapper.1.02.05.org/dmsetup/dmsetup.c device-mapper.1.02.05/dmset
  #include <sys/wait.h>
  #include <unistd.h>
  #include <sys/param.h>
-@@ -1496,7 +1495,9 @@
+@@ -1398,9 +1397,11 @@
+ 	int len;
+ 
+ 	/* Symbol set default */
++#ifndef __KLIBC__
+ 	if (!strcmp(nl_langinfo(CODESET), "UTF-8"))
+ 		_tsym = &_tsym_utf;
+ 	else
++#endif
+ 		_tsym = &_tsym_ascii;
+ 
+ 	/* Default */
+@@ -1496,7 +1497,9 @@
  	memset(&_values, 0, sizeof(_values));
  
  	namebase = strdup((*argv)[0]);
@@ -32,9 +44,19 @@ diff -ur device-mapper.1.02.05.org/dmsetup/dmsetup.c device-mapper.1.02.05/dmset
  
  	if (!strcmp(base, "devmap_name")) {
  		free(namebase);
-diff -ur device-mapper.1.02.05.org/lib/ioctl/libdm-iface.c device-mapper.1.02.05/lib/ioctl/libdm-iface.c
+@@ -1619,7 +1622,9 @@
+ 	struct command *c;
+ 	int r = 1;
+ 
++#ifndef __KLIBC__
+         (void) setlocale(LC_ALL, "");
++#endif
+ 
+ 	if (!_process_switches(&argc, &argv)) {
+ 		fprintf(stderr, "Couldn't process command line.\n");
+diff -urN device-mapper.1.02.05.org/lib/ioctl/libdm-iface.c device-mapper.1.02.05/lib/ioctl/libdm-iface.c
 --- device-mapper.1.02.05.org/lib/ioctl/libdm-iface.c	2006-04-03 17:56:02.000000000 +0200
-+++ device-mapper.1.02.05/lib/ioctl/libdm-iface.c	2006-04-22 20:33:35.020309500 +0200
++++ device-mapper.1.02.05/lib/ioctl/libdm-iface.c	2006-04-22 20:55:32.442643250 +0200
 @@ -135,17 +135,25 @@
  			    uint32_t *number)
  {
@@ -78,9 +100,9 @@ diff -ur device-mapper.1.02.05.org/lib/ioctl/libdm-iface.c device-mapper.1.02.05
  	fclose(fl);
  
  	if (number) {
-diff -ur device-mapper.1.02.05.org/lib/libdm-file.c device-mapper.1.02.05/lib/libdm-file.c
+diff -urN device-mapper.1.02.05.org/lib/libdm-file.c device-mapper.1.02.05/lib/libdm-file.c
 --- device-mapper.1.02.05.org/lib/libdm-file.c	2006-01-31 15:50:37.000000000 +0100
-+++ device-mapper.1.02.05/lib/libdm-file.c	2006-04-22 20:34:08.322390750 +0200
++++ device-mapper.1.02.05/lib/libdm-file.c	2006-04-22 20:55:32.446643500 +0200
 @@ -16,10 +16,16 @@
  #include "lib.h"
  #include "libdm-file.h"
