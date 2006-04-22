@@ -115,6 +115,10 @@ Dodatkowe skrypty.
 %patch1 -p1
 %patch2 -p1
 
+# klcc puts its own -I before any options, so klibc's <linux/*>
+# overrides include/linux/*, requiring very fresh kernel headers
+sed -i -e 's,<linux/dm-ioctl.h>,"../../kernel/ioctl/dm-ioctl.h",' lib/ioctl/libdm-iface.c
+
 %build
 cp -f /usr/share/automake/config.sub autoconf
 %{__aclocal}
