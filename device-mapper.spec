@@ -131,6 +131,7 @@ cp -f /usr/share/automake/config.sub autoconf
 	--disable-dynamic_link \
 	--enable-klibc \
 	CC="klcc -static"
+sed -i -e 's#-Dmalloc=rpl_malloc##g' make.tmpl
 %{__make}
 
 cp -a dmsetup/dmsetup.static initrd-dmsetup
@@ -144,6 +145,7 @@ cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper.a
 	--with-user=%(id -u) \
 	--with-group=%(id -g) \
 	--with-interface=ioctl \
+	--enable-dmeventd \
 	--disable-klibc
 %{__make}
 
