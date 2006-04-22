@@ -1,19 +1,19 @@
-diff -durN -x '*~' device-mapper.1.01.03.orig/configure.in device-mapper.1.01.03/configure.in
---- device-mapper.1.01.03.orig/configure.in	2005-06-13 16:07:29.000000000 +0200
-+++ device-mapper.1.01.03/configure.in	2005-07-31 18:58:27.000000000 +0200
-@@ -62,7 +62,7 @@
+diff -ur device-mapper.1.02.05.org/configure.in device-mapper.1.02.05/configure.in
+--- device-mapper.1.02.05.org/configure.in	2006-04-22 20:30:55.242324000 +0200
++++ device-mapper.1.02.05/configure.in	2006-04-22 20:31:08.979182500 +0200
+@@ -66,7 +66,7 @@
  AC_HEADER_STDC
  AC_HEADER_TIME
  
 -AC_CHECK_HEADERS(ctype.h dirent.h errno.h fcntl.h getopt.h inttypes.h limits.h stdarg.h stdio.h stdlib.h string.h sys/ioctl.h sys/param.h sys/stat.h sys/types.h unistd.h,,AC_MSG_ERROR(bailing out))
 +AC_CHECK_HEADERS(ctype.h dirent.h errno.h fcntl.h inttypes.h limits.h stdarg.h stdio.h stdlib.h string.h sys/ioctl.h sys/param.h sys/stat.h sys/types.h unistd.h,,AC_MSG_ERROR(bailing out))
  
+ AC_CHECK_HEADERS(termios.h)
  ################################################################################
- dnl -- Checks for typedefs, structures, and compiler characteristics.
-diff -durN -x '*~' device-mapper.1.01.03.orig/dmsetup/dmsetup.c device-mapper.1.01.03/dmsetup/dmsetup.c
---- device-mapper.1.01.03.orig/dmsetup/dmsetup.c	2005-05-16 22:46:46.000000000 +0200
-+++ device-mapper.1.01.03/dmsetup/dmsetup.c	2005-07-31 18:58:01.000000000 +0200
-@@ -26,7 +26,6 @@
+diff -ur device-mapper.1.02.05.org/dmsetup/dmsetup.c device-mapper.1.02.05/dmsetup/dmsetup.c
+--- device-mapper.1.02.05.org/dmsetup/dmsetup.c	2006-04-06 18:20:40.000000000 +0200
++++ device-mapper.1.02.05/dmsetup/dmsetup.c	2006-04-22 20:31:08.995183500 +0200
+@@ -29,7 +29,6 @@
  #include <dirent.h>
  #include <errno.h>
  #include <unistd.h>
@@ -21,7 +21,7 @@ diff -durN -x '*~' device-mapper.1.01.03.orig/dmsetup/dmsetup.c device-mapper.1.
  #include <sys/wait.h>
  #include <unistd.h>
  #include <sys/param.h>
-@@ -1051,7 +1050,9 @@
+@@ -1496,7 +1495,9 @@
  	memset(&_values, 0, sizeof(_values));
  
  	namebase = strdup((*argv)[0]);
@@ -32,17 +32,18 @@ diff -durN -x '*~' device-mapper.1.01.03.orig/dmsetup/dmsetup.c device-mapper.1.
  
  	if (!strcmp(base, "devmap_name")) {
  		free(namebase);
-diff -durN -x '*~' device-mapper.1.01.03.orig/lib/ioctl/libdm-iface.c device-mapper.1.01.03/lib/ioctl/libdm-iface.c
---- device-mapper.1.01.03.orig/lib/ioctl/libdm-iface.c	2005-07-31 18:02:15.000000000 +0200
-+++ device-mapper.1.01.03/lib/ioctl/libdm-iface.c	2005-07-31 18:58:01.000000000 +0200
-@@ -122,24 +122,30 @@
+diff -ur device-mapper.1.02.05.org/lib/ioctl/libdm-iface.c device-mapper.1.02.05/lib/ioctl/libdm-iface.c
+--- device-mapper.1.02.05.org/lib/ioctl/libdm-iface.c	2006-04-03 17:56:02.000000000 +0200
++++ device-mapper.1.02.05/lib/ioctl/libdm-iface.c	2006-04-22 20:33:35.020309500 +0200
+@@ -135,17 +135,25 @@
  			    uint32_t *number)
  {
  	FILE *fl;
 -	char nm[256];
--	int c;
 +	char nm[256], buf[300];
-+	int num, size;
+ 	int c;
+-	uint32_t num;
++	uint32_t num, size;
  
  	if (!(fl = fopen(file, "r"))) {
  		log_error("%s: fopen failed: %s", file, strerror(errno));
@@ -50,7 +51,7 @@ diff -durN -x '*~' device-mapper.1.01.03.orig/lib/ioctl/libdm-iface.c device-map
  	}
  
 -	while (!feof(fl)) {
--		if (fscanf(fl, "%d %255s\n", number, &nm[0]) == 2) {
+-		if (fscanf(fl, "%d %255s\n", &num, &nm[0]) == 2) {
 +	/* Use fread+sscanf for klibc compatibility. */
 +	do {
 +		size = 0;
@@ -62,8 +63,11 @@ diff -durN -x '*~' device-mapper.1.01.03.orig/lib/ioctl/libdm-iface.c device-map
 +		buf[size] = '\0';
 +		if (sscanf(buf, "%d %255s\n", number, &nm[0]) == 2) {
  			if (!strcmp(name, nm)) {
- 				fclose(fl);
- 				return 1;
+ 				if (number) {
+ 					*number = num;
+@@ -154,10 +162,8 @@
+ 				}
+ 				dm_bit_set(_dm_bitset, num);
  			}
 -		} else do {
 -			c = fgetc(fl);
@@ -73,11 +77,11 @@ diff -durN -x '*~' device-mapper.1.01.03.orig/lib/ioctl/libdm-iface.c device-map
 +	} while (num > 0);
  	fclose(fl);
  
- 	log_error("%s: No entry for %s found", file, name);
-diff -durN -x '*~' device-mapper.1.01.03.orig/lib/libdm-file.c device-mapper.1.01.03/lib/libdm-file.c
---- device-mapper.1.01.03.orig/lib/libdm-file.c	2005-01-27 17:16:54.000000000 +0100
-+++ device-mapper.1.01.03/lib/libdm-file.c	2005-07-31 18:58:01.000000000 +0200
-@@ -16,12 +16,14 @@
+ 	if (number) {
+diff -ur device-mapper.1.02.05.org/lib/libdm-file.c device-mapper.1.02.05/lib/libdm-file.c
+--- device-mapper.1.02.05.org/lib/libdm-file.c	2006-01-31 15:50:37.000000000 +0100
++++ device-mapper.1.02.05/lib/libdm-file.c	2006-04-22 20:34:08.322390750 +0200
+@@ -16,10 +16,16 @@
  #include "lib.h"
  #include "libdm-file.h"
  
@@ -85,13 +89,13 @@ diff -durN -x '*~' device-mapper.1.01.03.orig/lib/libdm-file.c device-mapper.1.0
  #include <fcntl.h>
  #include <dirent.h>
  
--#ifdef linux
--#  include <malloc.h>
 +#ifndef __KLIBC__
 +#  include <sys/file.h>
 +#  ifdef linux
 +#    include <malloc.h>
 +#  endif
- #endif
- 
++#endif
++
  static int _create_dir_recursive(const char *dir)
+ {
+ 	char *orig, *s;

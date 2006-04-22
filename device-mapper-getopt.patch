@@ -1,10 +1,10 @@
---- device-mapper.1.01.05/configure.in.orig	2006-01-24 22:48:51.000000000 +0100
-+++ device-mapper.1.01.05/configure.in	2006-01-24 22:49:47.000000000 +0100
-@@ -208,7 +208,7 @@
+--- dm/configure.in.org	2006-04-22 20:35:30.751542250 +0200
++++ dm/configure.in	2006-04-22 20:35:40.452148500 +0200
+@@ -234,7 +234,7 @@
  
  ################################################################################
  dnl -- Check for getopt
--AC_CHECK_HEADERS(getopt.h, CFLAGS="$CFLAGS -DHAVE_GETOPTLONG")
+-AC_CHECK_HEADERS(getopt.h, LVM_DEFS="$LVM_DEFS -DHAVE_GETOPTLONG")
 +AC_CHECK_HEADERS(getopt.h)
  
  ################################################################################
