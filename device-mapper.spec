@@ -6,17 +6,16 @@
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
-Version:	1.01.05
-Release:	2
+Version:	1.02.05
+Release:	0.1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
-# Source0-md5:	074cf116cc2c7194f2d100bc5f743833
-Patch0:		%{name}-stack.patch
+# Source0-md5:	e5cfc57a6e36af883dfedd9e9106f97e
 # http://www.redhat.com/archives/dm-devel/2005-March/msg00022.html
-Patch1:		%{name}-disable_dynamic_link.patch
-Patch2:		%{name}-klibc.patch
-Patch3:		%{name}-getopt.patch
+Patch0:		%{name}-disable_dynamic_link.patch
+Patch1:		%{name}-klibc.patch
+Patch2:		%{name}-getopt.patch
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -115,7 +114,6 @@ Dodatkowe skrypty.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 %build
 cp -f /usr/share/automake/config.sub autoconf
