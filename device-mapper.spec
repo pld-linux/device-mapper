@@ -7,7 +7,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	1.02.05
-Release:	0.3
+Release:	0.4
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -153,9 +153,6 @@ cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper.a
 	--disable-klibc
 %{__make}
 
-ar cru libdevmapper.a lib/ioctl/*.o lib/*.o
-ranlib libdevmapper.a
-
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/{%{_lib},%{_libdir}/%{name},/usr/{%{_lib},include}/klibc}
@@ -168,7 +165,7 @@ ln -sf /%{_lib}/${SONAME} $RPM_BUILD_ROOT%{_libdir}/libdevmapper.so
 mv -f $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.* $RPM_BUILD_ROOT/%{_lib}
 install scripts/* $RPM_BUILD_ROOT/%{_libdir}/%{name}
 
-install libdevmapper.a $RPM_BUILD_ROOT%{_libdir}
+install lib/ioctl/libdevmapper.a $RPM_BUILD_ROOT%{_libdir}
 %{?with_initrd:install initrd-dmsetup $RPM_BUILD_ROOT%{_sbindir}}
 %{?with_initrd:install initrd-libdevmapper.a $RPM_BUILD_ROOT/usr/%{_lib}/klibc/libdevmapper.a}
 %{?with_initrd:install include/libdevmapper.h $RPM_BUILD_ROOT/usr/include/klibc}
