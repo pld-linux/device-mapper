@@ -19,29 +19,29 @@ Patch2:		%{name}-getopt.patch
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
+%{?with_initrd:BuildRequires:	klibc-static}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.10}
 %{?with_selinux:Requires:	libselinux >= 1.10}
-%{?with_initrd:BuildRequires:	klibc-static}
 Conflicts:	dev < 2.9.0-8
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%undefine	configure_cache
 %define		_sbindir	/sbin
 
 %description
-The goal of this driver is to support volume management.
-The driver enables the definition of new block devices composed of
-ranges of sectors of existing devices. This can be used to define
-disk partitions - or logical volumes. This light-weight kernel
-component can support user-space tools for logical volume management.
+The goal of this driver is to support volume management. The driver
+enables the definition of new block devices composed of ranges of
+sectors of existing devices. This can be used to define disk
+partitions - or logical volumes. This light-weight kernel component
+can support user-space tools for logical volume management.
 
 %description -l pl
-Celem tego sterownika jest obs³uga zarz±dzania wolumenami.
-Sterownik w³±cza definiowanie nowych urz±dzeñ blokowych z³o¿onych z
-przedzia³ów sektorów na istniej±cych urz±dzeniach. Mo¿e to byæ
-wykorzystane do definiowania partycji na dysku lub logicznych
-wolumenów. Ten lekki sk³adnik j±dra mo¿e wspieraæ dzia³aj±ce w
-przestrzeni u¿ytkownika narzêdzia do zarz±dzania logicznymi
-wolumenami.
+Celem tego sterownika jest obs³uga zarz±dzania wolumenami. Sterownik
+w³±cza definiowanie nowych urz±dzeñ blokowych z³o¿onych z przedzia³ów
+sektorów na istniej±cych urz±dzeniach. Mo¿e to byæ wykorzystane do
+definiowania partycji na dysku lub logicznych wolumenów. Ten lekki
+sk³adnik j±dra mo¿e wspieraæ dzia³aj±ce w przestrzeni u¿ytkownika
+narzêdzia do zarz±dzania logicznymi wolumenami.
 
 %package initrd
 Summary:	Userspace support for the device-mapper - static dmsetup for initrd
@@ -207,6 +207,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files initrd-devel
 %defattr(644,root,root,755)
-/usr/%{_lib}/klibc/libdevmapper.a
-/usr/include/klibc/libdevmapper.h
+%{_prefix}/%{_lib}/klibc/libdevmapper.a
+%{_includedir}/klibc/libdevmapper.h
 %endif
