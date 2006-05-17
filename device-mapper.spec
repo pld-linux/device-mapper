@@ -6,12 +6,12 @@
 Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
-Version:	1.02.05
-Release:	0.4
+Version:	1.02.07
+Release:	0.1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
-# Source0-md5:	e5cfc57a6e36af883dfedd9e9106f97e
+# Source0-md5:	460cc211b03af4048ec90c0de2ecd8f7
 # http://www.redhat.com/archives/dm-devel/2005-March/msg00022.html
 Patch0:		%{name}-disable_dynamic_link.patch
 Patch1:		%{name}-klibc.patch
@@ -126,16 +126,15 @@ cp -f /usr/share/automake/config.sub autoconf
 
 %if %{with initrd}
 %configure \
+	CC="klcc -static" \
 	--disable-selinux \
+	--disable-dynamic_link \
+	--enable-static_link \
 	--with-optimisation="%{rpmcflags}" \
 	--with-user=%(id -u) \
 	--with-group=%(id -g) \
-	--with-interface=ioctl \
-	--enable-static_link \
-	--disable-dynamic_link \
-	--enable-klibc \
-	CC="klcc -static"
-sed -i -e 's#-Dmalloc=rpl_malloc##g' make.tmpl
+	--with-interface=ioctl
+sed -i -e 's#rpl_malloc#malloc#g' include/configure.h
 %{__make}
 
 cp -a dmsetup/dmsetup.static initrd-dmsetup
@@ -145,7 +144,7 @@ cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper.a
 
 %configure \
 	--%{?with_selinux:en}%{!?with_selinux:dis}able-selinux \
-	--with-optimisation="%{rpmcflags} -DHAVE_GETOPTLONG" \
+	--with-optimisation="%{rpmcflags}" \
 	--with-user=%(id -u) \
 	--with-group=%(id -g) \
 	--with-interface=ioctl \
@@ -162,13 +161,19 @@ install -d $RPM_BUILD_ROOT/{%{_lib},%{_libdir}/%{name},/usr/{%{_lib},include}/kl
 
 SONAME=$(cd $RPM_BUILD_ROOT%{_libdir}; echo libdevmapper.so.*.*)
 ln -sf /%{_lib}/${SONAME} $RPM_BUILD_ROOT%{_libdir}/libdevmapper.so
+SONAME=$(cd $RPM_BUILD_ROOT%{_libdir}; echo libdevmapper-event.so.*.*)
+ln -sf /%{_lib}/${SONAME} $RPM_BUILD_ROOT%{_libdir}/libdevmapper-event.so
 mv -f $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.* $RPM_BUILD_ROOT/%{_lib}
-install scripts/* $RPM_BUILD_ROOT/%{_libdir}/%{name}
+install scripts/* $RPM_BUILD_ROOT%{_libdir}/%{name}
 
 install lib/ioctl/libdevmapper.a $RPM_BUILD_ROOT%{_libdir}
-%{?with_initrd:install initrd-dmsetup $RPM_BUILD_ROOT%{_sbindir}}
-%{?with_initrd:install initrd-libdevmapper.a $RPM_BUILD_ROOT/usr/%{_lib}/klibc/libdevmapper.a}
-%{?with_initrd:install include/libdevmapper.h $RPM_BUILD_ROOT/usr/include/klibc}
+install dmeventd/libdevmapper-event.a $RPM_BUILD_ROOT%{_libdir}
+
+%if %{with initrd}
+install initrd-dmsetup $RPM_BUILD_ROOT%{_sbindir}
+install initrd-libdevmapper.a $RPM_BUILD_ROOT/usr/%{_lib}/klibc/libdevmapper.a
+install include/libdevmapper.h $RPM_BUILD_ROOT/usr/include/klibc
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -180,17 +185,20 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc INTRO INSTALL README scripts/*
 %attr(755,root,root) %{_sbindir}/dmsetup
-%attr(755,root,root) /%{_lib}/lib*.so.*.*
+%attr(755,root,root) /%{_lib}/libdevmapper.so.*.*
+%attr(755,root,root) /%{_lib}/libdevmapper-event.so.*.*
 %{_mandir}/man8/*
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libdevmapper.so
-%{_includedir}/*.h
+%attr(755,root,root) %{_libdir}/libdevmapper-event.so
+%{_includedir}/libdevmapper*.h
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/libdevmapper.a
+%{_libdir}/libdevmapper-event.a
 
 %files scripts
 %defattr(644,root,root,755)
