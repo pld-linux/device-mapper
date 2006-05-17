@@ -1,11 +1,20 @@
---- dm/configure.in.org	2006-04-22 20:35:30.751542250 +0200
-+++ dm/configure.in	2006-04-22 20:35:40.452148500 +0200
-@@ -234,7 +234,7 @@
+--- device-mapper.1.02.07/configure.in.orig	2006-05-17 19:23:21.778894500 +0200
++++ device-mapper.1.02.07/configure.in	2006-05-17 19:31:56.351053250 +0200
+@@ -209,7 +209,7 @@
+ ################################################################################
+ dnl -- getline included in recent libc
+ 
+-AC_CHECK_LIB(c, getline, AC_DEFINE([HAVE_GETLINE], 1, [Define to 1 if getline is available.]))
++AC_CHECK_FUNC(getline, [AC_DEFINE([HAVE_GETLINE], 1, [Define to 1 if getline is available.])])
+ 
+ ################################################################################
+ dnl -- Disable selinux
+@@ -240,7 +240,7 @@
  
  ################################################################################
  dnl -- Check for getopt
--AC_CHECK_HEADERS(getopt.h, LVM_DEFS="$LVM_DEFS -DHAVE_GETOPTLONG")
-+AC_CHECK_HEADERS(getopt.h)
+-AC_CHECK_HEADERS(getopt.h, AC_DEFINE([HAVE_GETOPTLONG], 1, [Define to 1 if getopt_long is available.]))
++AC_CHECK_FUNC(getopt_long, [AC_DEFINE([HAVE_GETOPTLONG], 1, [Define to 1 if getopt_long is available.])])
  
  ################################################################################
  dnl -- Internationalisation stuff
