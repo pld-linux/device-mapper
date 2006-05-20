@@ -7,7 +7,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	1.02.07
-Release:	0.1
+Release:	0.3
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -133,7 +133,8 @@ cp -f /usr/share/automake/config.sub autoconf
 	--with-optimisation="%{rpmcflags}" \
 	--with-user=%(id -u) \
 	--with-group=%(id -g) \
-	--with-interface=ioctl
+	--with-interface=ioctl \
+	--disable-nls
 sed -i -e 's#rpl_malloc#malloc#g' include/configure.h
 %{__make}
 
