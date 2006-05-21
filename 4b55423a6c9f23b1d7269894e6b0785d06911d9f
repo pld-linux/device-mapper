@@ -1,0 +1,3 @@
+- release 2
+- make scripts %doc (kill dep on perl-base, scripts are optional...
+  not required by /sbin/dmsetup)
