@@ -7,7 +7,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	1.02.07
-Release:	0.3
+Release:	0.8
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -21,6 +21,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_initrd:BuildRequires:	klibc-static}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.10}
+%{?with_initrd:BuildRequires:	uClibc-static >= 0.9.26}
 %{?with_selinux:Requires:	libselinux >= 1.10}
 Conflicts:	dev < 2.9.0-8
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -125,6 +126,7 @@ cp -f /usr/share/automake/config.sub autoconf
 %{__autoconf}
 
 %if %{with initrd}
+# kcc
 %configure \
 	CC="klcc -static" \
 	--disable-selinux \
@@ -139,7 +141,22 @@ sed -i -e 's#rpl_malloc#malloc#g' include/configure.h
 %{__make}
 
 cp -a dmsetup/dmsetup.static initrd-dmsetup
-cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper.a
+cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper-klibc.a
+%{__make} clean
+
+# uclibc (for lvm2)
+%configure \
+	%{?with_uClibc:CC="%{_target_cpu}-uclibc-gcc"} \
+	ac_cv_lib_dl_dlopen=no \
+	--with-optimisation="-Os" \
+	--enable-static_link \
+	--with-lvm1=internal \
+	--disable-selinux \
+	--disable-nls
+sed -i -e 's#rpl_malloc#malloc#g' include/configure.h
+%{__make}
+
+cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper-uclibc.a
 %{__make} clean
 %endif
 
@@ -155,7 +172,7 @@ cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper.a
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{%{_lib},%{_libdir}/%{name},/usr/{%{_lib},include}/klibc}
+install -d $RPM_BUILD_ROOT/{%{_lib},%{_libdir}/%{name}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -171,9 +188,12 @@ install lib/ioctl/libdevmapper.a $RPM_BUILD_ROOT%{_libdir}
 install dmeventd/libdevmapper-event.a $RPM_BUILD_ROOT%{_libdir}
 
 %if %{with initrd}
+install -d $RPM_BUILD_ROOT/usr/{{%{_lib},include}/klibc,%{_target_cpu}-linux-uclibc/{lib,usr/include}}
 install initrd-dmsetup $RPM_BUILD_ROOT%{_sbindir}
-install initrd-libdevmapper.a $RPM_BUILD_ROOT/usr/%{_lib}/klibc/libdevmapper.a
+install initrd-libdevmapper-klibc.a $RPM_BUILD_ROOT/usr/%{_lib}/klibc/libdevmapper.a
+install initrd-libdevmapper-uclibc.a $RPM_BUILD_ROOT/usr/%{_target_cpu}-linux-uclibc/%{_lib}/libdevmapper.a
 install include/libdevmapper.h $RPM_BUILD_ROOT/usr/include/klibc
+install include/libdevmapper.h $RPM_BUILD_ROOT/usr/%{_target_cpu}-linux-uclibc/usr/include
 %endif
 
 %clean
@@ -214,5 +234,7 @@ rm -rf $RPM_BUILD_ROOT
 %files initrd-devel
 %defattr(644,root,root,755)
 %{_prefix}/%{_lib}/klibc/libdevmapper.a
+%{_prefix}/%{_target_cpu}-linux-uclibc/lib
 %{_includedir}/klibc/libdevmapper.h
+%{_prefix}/%{_target_cpu}-linux-uclibc/usr/include/libdevmapper.h
 %endif
