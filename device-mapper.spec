@@ -7,7 +7,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	1.02.07
-Release:	0.8
+Release:	0.15
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -146,12 +146,11 @@ cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper-klibc.a
 
 # uclibc (for lvm2)
 %configure \
-	%{?with_uClibc:CC="%{_target_cpu}-uclibc-gcc"} \
-	ac_cv_lib_dl_dlopen=no \
-	--with-optimisation="-Os" \
-	--enable-static_link \
-	--with-lvm1=internal \
+	CC="%{_target_cpu}-uclibc-gcc" \
 	--disable-selinux \
+	--disable-dynamic_link \
+	--with-optimisation="-Os" \
+	--with-interface=ioctl \
 	--disable-nls
 sed -i -e 's#rpl_malloc#malloc#g' include/configure.h
 %{__make}
@@ -188,10 +187,10 @@ install lib/ioctl/libdevmapper.a $RPM_BUILD_ROOT%{_libdir}
 install dmeventd/libdevmapper-event.a $RPM_BUILD_ROOT%{_libdir}
 
 %if %{with initrd}
-install -d $RPM_BUILD_ROOT/usr/{{%{_lib},include}/klibc,%{_target_cpu}-linux-uclibc/{lib,usr/include}}
+install -d $RPM_BUILD_ROOT/usr/{{%{_lib},include}/klibc,%{_target_cpu}-linux-uclibc/usr/{%{_lib},include}}
 install initrd-dmsetup $RPM_BUILD_ROOT%{_sbindir}
 install initrd-libdevmapper-klibc.a $RPM_BUILD_ROOT/usr/%{_lib}/klibc/libdevmapper.a
-install initrd-libdevmapper-uclibc.a $RPM_BUILD_ROOT/usr/%{_target_cpu}-linux-uclibc/%{_lib}/libdevmapper.a
+install initrd-libdevmapper-uclibc.a $RPM_BUILD_ROOT/usr/%{_target_cpu}-linux-uclibc/usr/%{_lib}/libdevmapper.a
 install include/libdevmapper.h $RPM_BUILD_ROOT/usr/include/klibc
 install include/libdevmapper.h $RPM_BUILD_ROOT/usr/%{_target_cpu}-linux-uclibc/usr/include
 %endif
@@ -234,7 +233,7 @@ rm -rf $RPM_BUILD_ROOT
 %files initrd-devel
 %defattr(644,root,root,755)
 %{_prefix}/%{_lib}/klibc/libdevmapper.a
-%{_prefix}/%{_target_cpu}-linux-uclibc/lib
+%{_prefix}/%{_target_cpu}-linux-uclibc/usr/%{_lib}/libdevmapper.a
 %{_includedir}/klibc/libdevmapper.h
 %{_prefix}/%{_target_cpu}-linux-uclibc/usr/include/libdevmapper.h
 %endif
