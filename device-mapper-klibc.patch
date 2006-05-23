@@ -83,7 +83,7 @@ diff -urN device-mapper.1.02.05.org/lib/ioctl/libdm-iface.c device-mapper.1.02.0
 +				size++;
 +		} while (num > 0 && buf[size - 1] != '\n');
 +		buf[size] = '\0';
-+		if (sscanf(buf, "%d %255s\n", number, &nm[0]) == 2) {
++		if (sscanf(buf, "%d %255s\n", &num, &nm[0]) == 2) {
  			if (!strcmp(name, nm)) {
  				if (number) {
  					*number = num;
@@ -96,7 +96,7 @@ diff -urN device-mapper.1.02.05.org/lib/ioctl/libdm-iface.c device-mapper.1.02.0
 -		} while (c != EOF && c != '\n');
 -	}
 +		}
-+	} while (num > 0);
++	} while (size > 0);
  	fclose(fl);
  
  	if (number) {
