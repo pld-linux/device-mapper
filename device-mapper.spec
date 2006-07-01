@@ -16,6 +16,7 @@ Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
 Patch0:		%{name}-disable_dynamic_link.patch
 Patch1:		%{name}-klibc.patch
 Patch2:		%{name}-getopt.patch
+Patch3:		%{name}-ac.patch
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -115,6 +116,7 @@ Dodatkowe skrypty.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # klcc puts its own -I before any options, so klibc's <linux/*>
 # overrides include/linux/*, requiring very fresh kernel headers
