@@ -1,3 +1,5 @@
+# TODO
+# - add fix to drop BuildConflicts:	device-mapper-initrd-devel
 #
 # Conditional build:
 %bcond_without	selinux		# build without SELinux support
@@ -7,7 +9,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
 Version:	1.02.07
-Release:	0.17
+Release:	0.18
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -23,6 +25,8 @@ BuildRequires:	automake
 %{?with_initrd:BuildRequires:	klibc-static}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.10}
 %{?with_initrd:BuildRequires:	uClibc-static >= 0.9.26}
+# /usr/include/klibc/libdevmapper.h is included first before currently built version with klcc
+BuildConflicts:	device-mapper-initrd-devel < 1.02.07
 %{?with_selinux:Requires:	libselinux >= 1.10}
 Conflicts:	dev < 2.9.0-8
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
