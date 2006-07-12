@@ -1,0 +1,2 @@
+- don't use %{_lib} in uClibc path
+- release 0.17
