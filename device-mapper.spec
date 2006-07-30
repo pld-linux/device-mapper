@@ -135,6 +135,7 @@ cp -f /usr/share/automake/config.sub autoconf
 # kcc
 %configure \
 	CC="klcc -static" \
+	CLDFLAGS="%{rpmldflags}" \
 	--disable-selinux \
 	--disable-dynamic_link \
 	--enable-static_link \
@@ -153,6 +154,7 @@ cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper-klibc.a
 # uclibc (for lvm2)
 %configure \
 	CC="%{_target_cpu}-uclibc-gcc" \
+	CLDFLAGS="%{rpmldflags}" \
 	--disable-selinux \
 	--disable-dynamic_link \
 	--with-optimisation="-Os" \
@@ -166,6 +168,7 @@ cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper-uclibc.a
 %endif
 
 %configure \
+	CLDFLAGS="%{rpmldflags}" \
 	--%{?with_selinux:en}%{!?with_selinux:dis}able-selinux \
 	--with-optimisation="%{rpmcflags}" \
 	--with-user=%(id -u) \
