@@ -19,6 +19,7 @@ Patch0:		%{name}-disable_dynamic_link.patch
 Patch1:		%{name}-klibc.patch
 Patch2:		%{name}-getopt.patch
 Patch3:		%{name}-ac.patch
+Patch4:		%{name}-force-local-headers.patch
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -121,10 +122,7 @@ Dodatkowe skrypty.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-
-# klcc puts its own -I before any options, so klibc's <linux/*>
-# overrides include/linux/*, requiring very fresh kernel headers
-sed -i -e 's,<linux/dm-ioctl.h>,"../../kernel/ioctl/dm-ioctl.h",' lib/ioctl/libdm-iface.c
+%patch4 -p1
 
 %build
 cp -f /usr/share/automake/config.sub autoconf
