@@ -10,10 +10,9 @@ diff -urN device-mapper.1.02.05.org/configure.in device-mapper.1.02.05/configure
  
  AC_CHECK_HEADERS(termios.h)
  ################################################################################
-diff -urN device-mapper.1.02.05.org/dmsetup/dmsetup.c device-mapper.1.02.05/dmsetup/dmsetup.c
---- device-mapper.1.02.05.org/dmsetup/dmsetup.c	2006-04-06 18:20:40.000000000 +0200
-+++ device-mapper.1.02.05/dmsetup/dmsetup.c	2006-04-22 20:55:57.180189250 +0200
-@@ -29,7 +29,6 @@
+--- device-mapper.1.02.09/dmsetup/dmsetup.c.orig	2006-08-10 22:53:21.000000000 +0200
++++ device-mapper.1.02.09/dmsetup/dmsetup.c	2006-08-22 22:47:12.862554000 +0200
+@@ -31,7 +31,6 @@
  #include <dirent.h>
  #include <errno.h>
  #include <unistd.h>
@@ -21,7 +20,7 @@ diff -urN device-mapper.1.02.05.org/dmsetup/dmsetup.c device-mapper.1.02.05/dmse
  #include <sys/wait.h>
  #include <unistd.h>
  #include <sys/param.h>
-@@ -1398,9 +1397,11 @@
+@@ -1547,9 +1546,11 @@
  	int len;
  
  	/* Symbol set default */
@@ -33,7 +32,7 @@ diff -urN device-mapper.1.02.05.org/dmsetup/dmsetup.c device-mapper.1.02.05/dmse
  		_tsym = &_tsym_ascii;
  
  	/* Default */
-@@ -1496,7 +1497,9 @@
+@@ -1647,7 +1648,9 @@
  	memset(&_values, 0, sizeof(_values));
  
  	namebase = strdup((*argv)[0]);
@@ -44,12 +43,12 @@ diff -urN device-mapper.1.02.05.org/dmsetup/dmsetup.c device-mapper.1.02.05/dmse
  
  	if (!strcmp(base, "devmap_name")) {
  		free(namebase);
-@@ -1619,7 +1622,9 @@
+@@ -1783,7 +1786,9 @@
  	struct command *c;
  	int r = 1;
  
 +#ifndef __KLIBC__
-         (void) setlocale(LC_ALL, "");
+ 	(void) setlocale(LC_ALL, "");
 +#endif
  
  	if (!_process_switches(&argc, &argv)) {
