@@ -28,7 +28,7 @@ BuildRequires:	automake
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.10}
 %{?with_initrd:BuildRequires:	uClibc-static >= 0.9.26}
 # /usr/include/klibc/libdevmapper.h is included first before currently built version with klcc
-BuildConflicts:	device-mapper-initrd-devel < 1.02.07
+BuildConflicts:	device-mapper-initrd-devel < 1.02.17
 %{?with_selinux:Requires:	libselinux >= 1.10}
 Conflicts:	dev < 2.9.0-8
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -213,6 +213,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc INTRO INSTALL README scripts/*
+%attr(755,root,root) %{_sbindir}/dmeventd
 %attr(755,root,root) %{_sbindir}/dmsetup
 %attr(755,root,root) /%{_lib}/libdevmapper.so.*.*
 %attr(755,root,root) /%{_lib}/libdevmapper-event.so.*.*
