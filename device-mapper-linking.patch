@@ -1,11 +1,11 @@
---- device-mapper.1.02.09/dmeventd/Makefile.in~	2006-04-19 17:32:05.000000000 +0000
-+++ device-mapper.1.02.09/dmeventd/Makefile.in	2006-09-27 14:15:09.000000000 +0000
-@@ -28,7 +28,7 @@
- 
+--- device-mapper.1.02.09/dmeventd/Makefile.in~ 2006-04-19 17:32:05.000000000 +0000
++++ device-mapper.1.02.09/dmeventd/Makefile.in  2006-09-27 14:15:09.000000000 +0000
+@@ -31,7 +31,7 @@
  include ../make.tmpl
- 
+
+ LDFLAGS += -ldl -ldevmapper -lpthread
 -CLDFLAGS += -ldl -ldevmapper -lpthread
 +LIBS += -ldl ../lib/ioctl/libdevmapper.so -lpthread
- 
- .PHONY: install_dynamic install_static install_include \
- 	install_pkgconfig
+
+ dmeventd: $(LIB_SHARED) dmeventd.o
+        $(CC) -o $@ dmeventd.o $(CFLAGS) $(LDFLAGS) \

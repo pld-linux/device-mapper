@@ -91,7 +91,7 @@
  			if (!strcmp(name, nm)) {
  				if (number) {
  					*number = num;
-@@ -154,10 +162,8 @@
+@@ -155,10 +163,9 @@
  				}
  				dm_bit_set(_dm_bitset, num);
  			}
@@ -99,11 +99,12 @@
 -			c = fgetc(fl);
 -		} while (c != EOF && c != '\n');
 -	}
-+		}
++	        }
 +	} while (size > 0);
- 	fclose(fl);
++	
+ 	if (fclose(fl))
+ 		log_error("%s: fclose failed: %s", file, strerror(errno));
  
- 	if (number) {
 --- device-mapper.1.02.09.orig/lib/libdm-file.c	2006-05-10 16:23:41.000000000 +0000
 +++ device-mapper.1.02.09.klibc/lib/libdm-file.c	2006-09-27 18:22:22.000000000 +0000
 @@ -16,10 +16,16 @@
