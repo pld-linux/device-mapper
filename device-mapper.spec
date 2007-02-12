@@ -6,7 +6,7 @@
 %bcond_without	initrd		# don't build initrd version
 #
 Summary:	Userspace support for the device-mapper
-Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
+Summary(pl.UTF-8):   Wsparcie dla mapowania urzÄ…dzeÅ„ w przestrzeni uÅ¼ytkownika
 Name:		device-mapper
 Version:	1.02.17
 Release:	0.1
@@ -43,17 +43,17 @@ sectors of existing devices. This can be used to define disk
 partitions - or logical volumes. This light-weight kernel component
 can support user-space tools for logical volume management.
 
-%description -l pl
-Celem tego sterownika jest obs³uga zarz±dzania wolumenami. Sterownik
-w³±cza definiowanie nowych urz±dzeñ blokowych z³o¿onych z przedzia³ów
-sektorów na istniej±cych urz±dzeniach. Mo¿e to byæ wykorzystane do
-definiowania partycji na dysku lub logicznych wolumenów. Ten lekki
-sk³adnik j±dra mo¿e wspieraæ dzia³aj±ce w przestrzeni u¿ytkownika
-narzêdzia do zarz±dzania logicznymi wolumenami.
+%description -l pl.UTF-8
+Celem tego sterownika jest obsÅ‚uga zarzÄ…dzania wolumenami. Sterownik
+wÅ‚Ä…cza definiowanie nowych urzÄ…dzeÅ„ blokowych zÅ‚oÅ¼onych z przedziaÅ‚Ã³w
+sektorÃ³w na istniejÄ…cych urzÄ…dzeniach. MoÅ¼e to byÄ‡ wykorzystane do
+definiowania partycji na dysku lub logicznych wolumenÃ³w. Ten lekki
+skÅ‚adnik jÄ…dra moÅ¼e wspieraÄ‡ dziaÅ‚ajÄ…ce w przestrzeni uÅ¼ytkownika
+narzÄ™dzia do zarzÄ…dzania logicznymi wolumenami.
 
 %package initrd
 Summary:	Userspace support for the device-mapper - static dmsetup for initrd
-Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika - statyczne dmsetup dla initrd
+Summary(pl.UTF-8):   Wsparcie dla mapowania urzÄ…dzeÅ„ w przestrzeni uÅ¼ytkownika - statyczne dmsetup dla initrd
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
@@ -61,37 +61,37 @@ Requires:	%{name} = %{version}-%{release}
 Userspace support for the device-mapper - static dmsetup binary for
 initrd.
 
-%description initrd -l pl
-Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika - statyczna
+%description initrd -l pl.UTF-8
+Wsparcie dla mapowania urzÄ…dzeÅ„ w przestrzeni uÅ¼ytkownika - statyczna
 wersja dmsetup dla initrd.
 
 %package devel
 Summary:	Header files and development documentation for %{name}
-Summary(pl):	Pliki nag³ówkowe i dokumentacja do %{name}
+Summary(pl.UTF-8):   Pliki nagÅ‚Ã³wkowe i dokumentacja do %{name}
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files and development documentation for %{name}.
 
-%description devel -l pl
-Pliki nag³ówkowe i dokumentacja do %{name}.
+%description devel -l pl.UTF-8
+Pliki nagÅ‚Ã³wkowe i dokumentacja do %{name}.
 
 %package static
 Summary:	Static devmapper library
-Summary(pl):	Statyczna biblioteka devmapper
+Summary(pl.UTF-8):   Statyczna biblioteka devmapper
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static devmapper library.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczna biblioteka devmapper.
 
 %package initrd-devel
 Summary:	Static devmapper library and header files for initrd applications
-Summary(pl):	Statyczna biblioteka devmapper i jej pliki nag³ówkowe dla aplikacji initrd
+Summary(pl.UTF-8):   Statyczna biblioteka devmapper i jej pliki nagÅ‚Ã³wkowe dla aplikacji initrd
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	klibc
@@ -100,13 +100,13 @@ Requires:	klibc
 Static devmapper library and its header files for initrd applications
 linked with klibc.
 
-%description initrd-devel -l pl
+%description initrd-devel -l pl.UTF-8
 Statyczna, zlinkowana z klibc biblioteka devmapper oraz jej pliki
-nag³ówkowe dla aplikacji u¿ywanych w initrd.
+nagÅ‚Ã³wkowe dla aplikacji uÅ¼ywanych w initrd.
 
 %package scripts
 Summary:	Additional scripts
-Summary(pl):	Dodatkowe skrypty
+Summary(pl.UTF-8):   Dodatkowe skrypty
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 Requires:	util-linux
@@ -114,7 +114,7 @@ Requires:	util-linux
 %description scripts
 Additional scripts.
 
-%description scripts -l pl
+%description scripts -l pl.UTF-8
 Dodatkowe skrypty.
 
 %prep
