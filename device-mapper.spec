@@ -6,7 +6,7 @@
 %bcond_without	initrd		# don't build initrd version
 #
 Summary:	Userspace support for the device-mapper
-Summary(pl.UTF-8):   Wsparcie dla mapowania urządzeń w przestrzeni użytkownika
+Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika
 Name:		device-mapper
 Version:	1.02.17
 Release:	0.1
@@ -53,7 +53,7 @@ narzędzia do zarządzania logicznymi wolumenami.
 
 %package initrd
 Summary:	Userspace support for the device-mapper - static dmsetup for initrd
-Summary(pl.UTF-8):   Wsparcie dla mapowania urządzeń w przestrzeni użytkownika - statyczne dmsetup dla initrd
+Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika - statyczne dmsetup dla initrd
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
@@ -67,7 +67,7 @@ wersja dmsetup dla initrd.
 
 %package devel
 Summary:	Header files and development documentation for %{name}
-Summary(pl.UTF-8):   Pliki nagłówkowe i dokumentacja do %{name}
+Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja do %{name}
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -79,7 +79,7 @@ Pliki nagłówkowe i dokumentacja do %{name}.
 
 %package static
 Summary:	Static devmapper library
-Summary(pl.UTF-8):   Statyczna biblioteka devmapper
+Summary(pl.UTF-8):	Statyczna biblioteka devmapper
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
@@ -91,7 +91,7 @@ Statyczna biblioteka devmapper.
 
 %package initrd-devel
 Summary:	Static devmapper library and header files for initrd applications
-Summary(pl.UTF-8):   Statyczna biblioteka devmapper i jej pliki nagłówkowe dla aplikacji initrd
+Summary(pl.UTF-8):	Statyczna biblioteka devmapper i jej pliki nagłówkowe dla aplikacji initrd
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	klibc
@@ -106,7 +106,7 @@ nagłówkowe dla aplikacji używanych w initrd.
 
 %package scripts
 Summary:	Additional scripts
-Summary(pl.UTF-8):   Dodatkowe skrypty
+Summary(pl.UTF-8):	Dodatkowe skrypty
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 Requires:	util-linux
