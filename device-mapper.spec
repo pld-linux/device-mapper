@@ -9,7 +9,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika
 Name:		device-mapper
 Version:	1.02.18
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -175,6 +175,7 @@ cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper-uclibc.a
 	--with-group=%(id -g) \
 	--with-interface=ioctl \
 	--enable-dmeventd \
+	--enable-pkgconfig \
 	--disable-klibc
 %{__make}
 
@@ -183,6 +184,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/{%{_lib},%{_libdir}/%{name}}
 
 %{__make} install \
+	usrlibdir="$RPM_BUILD_ROOT%{_libdir}" \
 	DESTDIR=$RPM_BUILD_ROOT
 
 SONAME=$(cd $RPM_BUILD_ROOT%{_libdir}; echo libdevmapper.so.*.*)
@@ -224,6 +226,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libdevmapper.so
 %attr(755,root,root) %{_libdir}/libdevmapper-event.so
 %{_includedir}/libdevmapper*.h
+%{_pkgconfigdir}/*.pc
 
 %files static
 %defattr(644,root,root,755)
