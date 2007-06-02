@@ -4,6 +4,7 @@
 # Conditional build:
 %bcond_without	selinux		# build without SELinux support
 %bcond_without	initrd		# don't build initrd version
+%bcond_with	uclibc
 #
 Summary:	Userspace support for the device-mapper
 Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika
@@ -26,7 +27,9 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_initrd:BuildRequires:	klibc-static}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.10}
-%{?with_initrd:BuildRequires:	uClibc-static >= 0.9.26}
+%if %{with initrd} && %{with uclibc}
+BuildRequires:	uClibc-static >= 0.9.26
+%endif
 # /usr/include/klibc/libdevmapper.h is included first before currently built version with klcc
 BuildConflicts:	device-mapper-initrd-devel < 1.02.17
 %{?with_selinux:Requires:	libselinux >= 1.10}
@@ -151,6 +154,7 @@ cp -a dmsetup/dmsetup.static initrd-dmsetup
 cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper-klibc.a
 %{__make} clean
 
+%if %{with uclibc}
 # uclibc (for lvm2)
 %configure \
 	CC="%{_target_cpu}-uclibc-gcc" \
@@ -165,6 +169,7 @@ sed -i -e 's#rpl_malloc#malloc#g' include/configure.h
 
 cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper-uclibc.a
 %{__make} clean
+%endif
 %endif
 
 %configure \
@@ -201,9 +206,11 @@ install dmeventd/libdevmapper-event.a $RPM_BUILD_ROOT%{_libdir}
 install -d $RPM_BUILD_ROOT/usr/{{%{_lib},include}/klibc,%{_target_cpu}-linux-uclibc/usr/{lib,include}}
 install initrd-dmsetup $RPM_BUILD_ROOT%{_sbindir}
 install initrd-libdevmapper-klibc.a $RPM_BUILD_ROOT/usr/%{_lib}/klibc/libdevmapper.a
-install initrd-libdevmapper-uclibc.a $RPM_BUILD_ROOT/usr/%{_target_cpu}-linux-uclibc/usr/lib/libdevmapper.a
 install include/libdevmapper.h $RPM_BUILD_ROOT/usr/include/klibc
+%if %{with uclibc}
+install initrd-libdevmapper-uclibc.a $RPM_BUILD_ROOT/usr/%{_target_cpu}-linux-uclibc/usr/lib/libdevmapper.a
 install include/libdevmapper.h $RPM_BUILD_ROOT/usr/%{_target_cpu}-linux-uclibc/usr/include
+%endif
 %endif
 
 %clean
@@ -246,7 +253,9 @@ rm -rf $RPM_BUILD_ROOT
 %files initrd-devel
 %defattr(644,root,root,755)
 %{_prefix}/%{_lib}/klibc/libdevmapper.a
-%{_prefix}/%{_target_cpu}-linux-uclibc/usr/lib/libdevmapper.a
 %{_includedir}/klibc/libdevmapper.h
+%if %{with uclibc}
+%{_prefix}/%{_target_cpu}-linux-uclibc/usr/lib/libdevmapper.a
 %{_prefix}/%{_target_cpu}-linux-uclibc/usr/include/libdevmapper.h
+%endif
 %endif
