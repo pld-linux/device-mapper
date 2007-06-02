@@ -4,7 +4,7 @@
 # Conditional build:
 %bcond_without	selinux		# build without SELinux support
 %bcond_without	initrd		# don't build initrd version
-%bcond_with	uclibc
+%bcond_without	uclibc
 #
 Summary:	Userspace support for the device-mapper
 Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika
