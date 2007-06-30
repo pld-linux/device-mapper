@@ -9,12 +9,12 @@
 Summary:	Userspace support for the device-mapper
 Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika
 Name:		device-mapper
-Version:	1.02.19
-Release:	4
+Version:	1.02.20
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
-# Source0-md5:	37cb592a1fa8fc31dc00cb437bbb4969
+# Source0-md5:	6b8f350ca385e2afafd1fb98f1a15e10
 # http://www.redhat.com/archives/dm-devel/2005-March/msg00022.html
 Patch0:		%{name}-disable_dynamic_link.patch
 Patch1:		%{name}-klibc.patch
