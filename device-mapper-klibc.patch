@@ -59,9 +59,9 @@
  
  	if (!_process_switches(&argc, &argv)) {
  		fprintf(stderr, "Couldn't process command line.\n");
---- device-mapper.1.02.09.orig/lib/ioctl/libdm-iface.c	2006-08-08 21:22:31.000000000 +0000
-+++ device-mapper.1.02.09.klibc/lib/ioctl/libdm-iface.c	2006-09-27 18:22:22.000000000 +0000
-@@ -135,17 +135,25 @@
+--- device-mapper.1.02.22/lib/ioctl/libdm-iface.c.orig	2007-08-21 18:26:07.000000000 +0200
++++ device-mapper.1.02.22/lib/ioctl/libdm-iface.c	2007-09-09 23:59:33.337996036 +0200
+@@ -134,17 +134,25 @@
  			    uint32_t *number)
  {
  	FILE *fl;
@@ -72,7 +72,7 @@
 +	uint32_t num, size;
  
  	if (!(fl = fopen(file, "r"))) {
- 		log_error("%s: fopen failed: %s", file, strerror(errno));
+ 		log_sys_error("fopen", file);
  		return 0;
  	}
  
@@ -91,7 +91,7 @@
  			if (!strcmp(name, nm)) {
  				if (number) {
  					*number = num;
-@@ -155,10 +163,9 @@
+@@ -154,10 +162,9 @@
  				}
  				dm_bit_set(_dm_bitset, num);
  			}
@@ -103,13 +103,13 @@
 +	} while (size > 0);
 +	
  	if (fclose(fl))
- 		log_error("%s: fclose failed: %s", file, strerror(errno));
+ 		log_sys_error("fclose", file);
  
---- device-mapper.1.02.09.orig/lib/libdm-file.c	2006-05-10 16:23:41.000000000 +0000
-+++ device-mapper.1.02.09.klibc/lib/libdm-file.c	2006-09-27 18:22:22.000000000 +0000
-@@ -16,10 +16,16 @@
+--- device-mapper.1.02.22/lib/libdm-file.c.orig	2007-08-21 18:26:06.000000000 +0200
++++ device-mapper.1.02.22/lib/libdm-file.c	2007-09-10 00:20:00.475926641 +0200
+@@ -15,10 +15,16 @@
+ 
  #include "lib.h"
- #include "libdm-file.h"
  
 -#include <sys/file.h>
  #include <fcntl.h>
@@ -125,3 +125,15 @@
  static int _create_dir_recursive(const char *dir)
  {
  	char *orig, *s;
+@@ -73,7 +79,11 @@
+ 
+ int dm_fclose(FILE *stream)
+ {
++#ifdef __KLIBC__
++	int prev_fail = 0;
++#else
+ 	int prev_fail = ferror(stream);
++#endif
+ 	int fclose_fail = fclose(stream);
+ 
+ 	/* If there was a previous failure, but fclose succeeded,
