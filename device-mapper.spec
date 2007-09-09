@@ -9,12 +9,12 @@
 Summary:	Userspace support for the device-mapper
 Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika
 Name:		device-mapper
-Version:	1.02.20
+Version:	1.02.22
 Release:	1
-License:	GPL v2
+License:	LGPL v2.1 (library), GPL v2 (executables)
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
-# Source0-md5:	6b8f350ca385e2afafd1fb98f1a15e10
+# Source0-md5:	6b94db57cdc9022af1583b3f2acb91cd
 # http://www.redhat.com/archives/dm-devel/2005-March/msg00022.html
 Patch0:		%{name}-disable_dynamic_link.patch
 Patch1:		%{name}-klibc.patch
@@ -57,6 +57,7 @@ narzędzia do zarządzania logicznymi wolumenami.
 %package initrd
 Summary:	Userspace support for the device-mapper - static dmsetup for initrd
 Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika - statyczne dmsetup dla initrd
+License:	GPL v2
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
@@ -71,6 +72,7 @@ wersja dmsetup dla initrd.
 %package devel
 Summary:	Header files and development documentation for %{name}
 Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja do %{name}
+License:	LGPL v2.1
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -83,6 +85,7 @@ Pliki nagłówkowe i dokumentacja do %{name}.
 %package static
 Summary:	Static devmapper library
 Summary(pl.UTF-8):	Statyczna biblioteka devmapper
+License:	LGPL v2.1
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
@@ -95,6 +98,7 @@ Statyczna biblioteka devmapper.
 %package initrd-devel
 Summary:	Static devmapper library and header files for initrd applications
 Summary(pl.UTF-8):	Statyczna biblioteka devmapper i jej pliki nagłówkowe dla aplikacji initrd
+License:	LGPL v2.1
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	klibc
@@ -110,6 +114,7 @@ nagłówkowe dla aplikacji używanych w initrd.
 %package scripts
 Summary:	Additional scripts
 Summary(pl.UTF-8):	Dodatkowe skrypty
+License:	GPL v2
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 Requires:	util-linux
@@ -186,15 +191,15 @@ cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper-uclibc.a
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/{%{_lib},%{_libdir}/%{name}}
+install -d $RPM_BUILD_ROOT{/%{_lib},%{_libdir}/%{name}}
 
 %{__make} install \
 	usrlibdir="$RPM_BUILD_ROOT%{_libdir}" \
 	DESTDIR=$RPM_BUILD_ROOT
 
-SONAME=$(cd $RPM_BUILD_ROOT%{_libdir}; echo libdevmapper.so.*.*)
+SONAME=$(basename $RPM_BUILD_ROOT%{_libdir}/libdevmapper.so.*.*)
 ln -sf /%{_lib}/${SONAME} $RPM_BUILD_ROOT%{_libdir}/libdevmapper.so
-SONAME=$(cd $RPM_BUILD_ROOT%{_libdir}; echo libdevmapper-event.so.*.*)
+SONAME=$(basename $RPM_BUILD_ROOT%{_libdir}/libdevmapper-event.so.*.*)
 ln -sf /%{_lib}/${SONAME} $RPM_BUILD_ROOT%{_libdir}/libdevmapper-event.so
 mv -f $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.* $RPM_BUILD_ROOT/%{_lib}
 install scripts/* $RPM_BUILD_ROOT%{_libdir}/%{name}
@@ -221,19 +226,20 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc INTRO INSTALL README scripts/*
+%doc INTRO INSTALL README
 %attr(755,root,root) %{_sbindir}/dmeventd
 %attr(755,root,root) %{_sbindir}/dmsetup
 %attr(755,root,root) /%{_lib}/libdevmapper.so.*.*
 %attr(755,root,root) /%{_lib}/libdevmapper-event.so.*.*
-%{_mandir}/man8/*
+%{_mandir}/man8/dmsetup.8*
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libdevmapper.so
 %attr(755,root,root) %{_libdir}/libdevmapper-event.so
 %{_includedir}/libdevmapper*.h
-%{_pkgconfigdir}/*.pc
+%{_pkgconfigdir}/devmapper.pc
+%{_pkgconfigdir}/devmapper-event.pc
 
 %files static
 %defattr(644,root,root,755)
