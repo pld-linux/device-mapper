@@ -6,6 +6,10 @@
 %bcond_without	initrd		# don't build initrd version
 %bcond_without	uclibc
 #
+%ifarch sparc sparcv9 sparc64
+%undefine with_uclibc
+%endif
+
 Summary:	Userspace support for the device-mapper
 Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika
 Name:		device-mapper
