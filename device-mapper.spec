@@ -29,7 +29,7 @@ Patch5:		%{name}-linking.patch
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{?with_initrd:BuildRequires:	klibc-static}
+%{?with_initrd:BuildRequires:	klibc-static >= 1.3.22}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.10}
 %if %{with initrd} && %{with uclibc}
 BuildRequires:	uClibc-static >= 0.9.26
