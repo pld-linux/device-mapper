@@ -14,7 +14,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika
 Name:		device-mapper
 Version:	1.02.22
-Release:	2
+Release:	2.1
 License:	LGPL v2.1 (library), GPL v2 (executables)
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -157,6 +157,10 @@ cp -f /usr/share/automake/config.sub autoconf
 	--with-interface=ioctl \
 	--disable-nls
 sed -i -e 's#rpl_malloc#malloc#g' include/configure.h
+# On AC it successfully finds canonicalize_file_name() from glibc's libc.a
+# On TH it it fails to do anything with libc.a due link errors (undefined reference to `_Unwind_Resume', undefined reference to `__gcc_personality_v0', ...)
+# really it should check func from klibc libc.a
+sed -i -e 's,#define HAVE_CANONICALIZE_FILE_NAME 1,#undef HAVE_CANONICALIZE_FILE_NAME,' include/configure.h
 %{__make}
 
 cp -a dmsetup/dmsetup.static initrd-dmsetup
