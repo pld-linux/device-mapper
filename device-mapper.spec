@@ -14,7 +14,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika
 Name:		device-mapper
 Version:	1.02.22
-Release:	2.1
+Release:	3
 License:	LGPL v2.1 (library), GPL v2 (executables)
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -26,6 +26,7 @@ Patch2:		%{name}-getopt.patch
 Patch3:		%{name}-ac.patch
 Patch4:		%{name}-force-local-headers.patch
 Patch5:		%{name}-linking.patch
+Patch6:		%{name}-dmsetup-export.patch
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -137,6 +138,7 @@ Dodatkowe skrypty.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 cp -f /usr/share/automake/config.sub autoconf
