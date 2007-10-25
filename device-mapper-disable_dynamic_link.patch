@@ -45,17 +45,3 @@ diff -durN -x '*~' device-mapper.1.01.03.orig/lib/Makefile.in device-mapper.1.01
  
  ifeq ("@STATIC_LINK@", "yes")
    INSTALL_TYPE += install_static
---- device-mapper.1.02.07/make.tmpl.in.orig	2006-05-10 21:38:25.000000000 +0200
-+++ device-mapper.1.02.07/make.tmpl.in	2006-05-17 19:11:38.814962000 +0200
-@@ -123,7 +123,11 @@
- .PHONY: $(SUBDIRS) $(SUBDIRS.install) $(SUBDIRS.clean) $(SUBDIRS.distclean)
- .PHONY: $(SUBDIRS.pofile)
- 
-+ifeq ("@DYNAMIC_LINK@", "yes")
- TARGETS += $(LIB_SHARED) $(LIB_STATIC)
-+else
-+TARGETS += $(LIB_STATIC)
-+endif
- 
- all: $(SUBDIRS) $(TARGETS)
- 

@@ -1,67 +1,51 @@
-# TODO
-# - add fix to drop BuildConflicts:	device-mapper-initrd-devel
 #
 # Conditional build:
 %bcond_without	selinux		# build without SELinux support
 %bcond_without	initrd		# don't build initrd version
-%bcond_without	uclibc
 #
-%ifarch sparc sparcv9 sparc64
-%undefine with_uclibc
-%endif
-
 Summary:	Userspace support for the device-mapper
-Summary(pl.UTF-8):	Wsparcie dla mapowania urzÄ…dzeÅ„ w przestrzeni uÅ¼ytkownika
+Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika
 Name:		device-mapper
-Version:	1.02.22
-Release:	2.1
-License:	LGPL v2.1 (library), GPL v2 (executables)
+Version:	1.01.05
+Release:	1
+License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
-# Source0-md5:	6b94db57cdc9022af1583b3f2acb91cd
+# Source0-md5:	074cf116cc2c7194f2d100bc5f743833
+Patch0:		%{name}-stack.patch
 # http://www.redhat.com/archives/dm-devel/2005-March/msg00022.html
-Patch0:		%{name}-disable_dynamic_link.patch
-Patch1:		%{name}-klibc.patch
-Patch2:		%{name}-getopt.patch
-Patch3:		%{name}-ac.patch
-Patch4:		%{name}-force-local-headers.patch
-Patch5:		%{name}-linking.patch
+Patch1:		%{name}-disable_dynamic_link.patch
+Patch2:		%{name}-klibc.patch
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{?with_initrd:BuildRequires:	klibc-static >= 1.3.22}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.10}
-%if %{with initrd} && %{with uclibc}
-BuildRequires:	uClibc-static >= 0.9.26
-%endif
-# /usr/include/klibc/libdevmapper.h is included first before currently built version with klcc
-BuildConflicts:	device-mapper-initrd-devel < 1.02.17
 %{?with_selinux:Requires:	libselinux >= 1.10}
+%{?with_initrd:BuildRequires:	klibc-static}
 Conflicts:	dev < 2.9.0-8
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%undefine	configure_cache
 %define		_sbindir	/sbin
 
 %description
-The goal of this driver is to support volume management. The driver
-enables the definition of new block devices composed of ranges of
-sectors of existing devices. This can be used to define disk
-partitions - or logical volumes. This light-weight kernel component
-can support user-space tools for logical volume management.
+The goal of this driver is to support volume management.
+The driver enables the definition of new block devices composed of
+ranges of sectors of existing devices. This can be used to define
+disk partitions - or logical volumes. This light-weight kernel
+component can support user-space tools for logical volume management.
 
-%description -l pl.UTF-8
-Celem tego sterownika jest obsÅ‚uga zarzÄ…dzania wolumenami. Sterownik
-wÅ‚Ä…cza definiowanie nowych urzÄ…dzeÅ„ blokowych zÅ‚oÅ¼onych z przedziaÅ‚Ã³w
-sektorÃ³w na istniejÄ…cych urzÄ…dzeniach. MoÅ¼e to byÄ‡ wykorzystane do
-definiowania partycji na dysku lub logicznych wolumenÃ³w. Ten lekki
-skÅ‚adnik jÄ…dra moÅ¼e wspieraÄ‡ dziaÅ‚ajÄ…ce w przestrzeni uÅ¼ytkownika
-narzÄ™dzia do zarzÄ…dzania logicznymi wolumenami.
+%description -l pl
+Celem tego sterownika jest obs³uga zarz±dzania wolumenami.
+Sterownik w³±cza definiowanie nowych urz±dzeñ blokowych z³o¿onych z
+przedzia³ów sektorów na istniej±cych urz±dzeniach. Mo¿e to byæ
+wykorzystane do definiowania partycji na dysku lub logicznych
+wolumenów. Ten lekki sk³adnik j±dra mo¿e wspieraæ dzia³aj±ce w
+przestrzeni u¿ytkownika narzêdzia do zarz±dzania logicznymi
+wolumenami.
 
 %package initrd
 Summary:	Userspace support for the device-mapper - static dmsetup for initrd
-Summary(pl.UTF-8):	Wsparcie dla mapowania urzÄ…dzeÅ„ w przestrzeni uÅ¼ytkownika - statyczne dmsetup dla initrd
-License:	GPL v2
+Summary(pl):	Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika - statyczne dmsetup dla initrd
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
@@ -69,40 +53,37 @@ Requires:	%{name} = %{version}-%{release}
 Userspace support for the device-mapper - static dmsetup binary for
 initrd.
 
-%description initrd -l pl.UTF-8
-Wsparcie dla mapowania urzÄ…dzeÅ„ w przestrzeni uÅ¼ytkownika - statyczna
+%description initrd -l pl
+Wsparcie dla mapowania urz±dzeñ w przestrzeni u¿ytkownika - statyczna
 wersja dmsetup dla initrd.
 
 %package devel
 Summary:	Header files and development documentation for %{name}
-Summary(pl.UTF-8):	Pliki nagÅ‚Ã³wkowe i dokumentacja do %{name}
-License:	LGPL v2.1
+Summary(pl):	Pliki nag³ówkowe i dokumentacja do %{name}
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files and development documentation for %{name}.
 
-%description devel -l pl.UTF-8
-Pliki nagÅ‚Ã³wkowe i dokumentacja do %{name}.
+%description devel -l pl
+Pliki nag³ówkowe i dokumentacja do %{name}.
 
 %package static
 Summary:	Static devmapper library
-Summary(pl.UTF-8):	Statyczna biblioteka devmapper
-License:	LGPL v2.1
+Summary(pl):	Statyczna biblioteka devmapper
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static devmapper library.
 
-%description static -l pl.UTF-8
+%description static -l pl
 Statyczna biblioteka devmapper.
 
 %package initrd-devel
 Summary:	Static devmapper library and header files for initrd applications
-Summary(pl.UTF-8):	Statyczna biblioteka devmapper i jej pliki nagÅ‚Ã³wkowe dla aplikacji initrd
-License:	LGPL v2.1
+Summary(pl):	Statyczna biblioteka devmapper i jej pliki nag³ówkowe dla aplikacji initrd
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	klibc
@@ -111,14 +92,13 @@ Requires:	klibc
 Static devmapper library and its header files for initrd applications
 linked with klibc.
 
-%description initrd-devel -l pl.UTF-8
+%description initrd-devel -l pl
 Statyczna, zlinkowana z klibc biblioteka devmapper oraz jej pliki
-nagÅ‚Ã³wkowe dla aplikacji uÅ¼ywanych w initrd.
+nag³ówkowe dla aplikacji u¿ywanych w initrd.
 
 %package scripts
 Summary:	Additional scripts
-Summary(pl.UTF-8):	Dodatkowe skrypty
-License:	GPL v2
+Summary(pl):	Dodatkowe skrypty
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 Requires:	util-linux
@@ -126,7 +106,7 @@ Requires:	util-linux
 %description scripts
 Additional scripts.
 
-%description scripts -l pl.UTF-8
+%description scripts -l pl
 Dodatkowe skrypty.
 
 %prep
@@ -134,9 +114,6 @@ Dodatkowe skrypty.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 %build
 cp -f /usr/share/automake/config.sub autoconf
@@ -144,87 +121,51 @@ cp -f /usr/share/automake/config.sub autoconf
 %{__autoconf}
 
 %if %{with initrd}
-# kcc
 %configure \
-	CC="klcc -static" \
-	CLDFLAGS="%{rpmldflags}" \
 	--disable-selinux \
-	--disable-dynamic_link \
-	--enable-static_link \
 	--with-optimisation="%{rpmcflags}" \
 	--with-user=%(id -u) \
 	--with-group=%(id -g) \
 	--with-interface=ioctl \
-	--disable-nls
-sed -i -e 's#rpl_malloc#malloc#g' include/configure.h
-# On AC it successfully finds canonicalize_file_name() from glibc's libc.a
-# On TH it it fails to do anything with libc.a due link errors (undefined reference to `_Unwind_Resume', undefined reference to `__gcc_personality_v0', ...)
-# really it should check func from klibc libc.a
-sed -i -e 's,#define HAVE_CANONICALIZE_FILE_NAME 1,#undef HAVE_CANONICALIZE_FILE_NAME,' include/configure.h
+	--enable-static_link \
+	--disable-dynamic_link \
+	--enable-klibc \
+	CC="klcc -static"
 %{__make}
 
 cp -a dmsetup/dmsetup.static initrd-dmsetup
-cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper-klibc.a
+cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper.a
 %{__make} clean
-
-%if %{with uclibc}
-# uclibc (for lvm2)
-%configure \
-	CC="%{_target_cpu}-uclibc-gcc" \
-	CLDFLAGS="%{rpmldflags}" \
-	--disable-selinux \
-	--disable-dynamic_link \
-	--with-optimisation="-Os" \
-	--with-interface=ioctl \
-	--disable-nls
-sed -i -e 's#rpl_malloc#malloc#g' include/configure.h
-%{__make}
-
-cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper-uclibc.a
-%{__make} clean
-%endif
 %endif
 
 %configure \
-	CLDFLAGS="%{rpmldflags}" \
 	--%{?with_selinux:en}%{!?with_selinux:dis}able-selinux \
 	--with-optimisation="%{rpmcflags}" \
 	--with-user=%(id -u) \
 	--with-group=%(id -g) \
 	--with-interface=ioctl \
-	--enable-dmeventd \
-	--enable-pkgconfig \
 	--disable-klibc
 %{__make}
 
+ar cru libdevmapper.a lib/ioctl/*.o lib/*.o
+ranlib libdevmapper.a
+
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/%{_lib},%{_libdir}/%{name}}
+install -d $RPM_BUILD_ROOT/{%{_lib},%{_libdir}/%{name},/usr/{%{_lib},include}/klibc}
 
 %{__make} install \
-	usrlibdir="$RPM_BUILD_ROOT%{_libdir}" \
 	DESTDIR=$RPM_BUILD_ROOT
 
-SONAME=$(basename $RPM_BUILD_ROOT%{_libdir}/libdevmapper.so.*.*)
+SONAME=$(basename $(ls -1 $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.*))
 ln -sf /%{_lib}/${SONAME} $RPM_BUILD_ROOT%{_libdir}/libdevmapper.so
-SONAME=$(basename $RPM_BUILD_ROOT%{_libdir}/libdevmapper-event.so.*.*)
-ln -sf /%{_lib}/${SONAME} $RPM_BUILD_ROOT%{_libdir}/libdevmapper-event.so
 mv -f $RPM_BUILD_ROOT%{_libdir}/lib*.so.*.* $RPM_BUILD_ROOT/%{_lib}
-install scripts/* $RPM_BUILD_ROOT%{_libdir}/%{name}
+install scripts/* $RPM_BUILD_ROOT/%{_libdir}/%{name}
 
-install lib/ioctl/libdevmapper.a $RPM_BUILD_ROOT%{_libdir}
-install dmeventd/libdevmapper-event.a $RPM_BUILD_ROOT%{_libdir}
-
-%if %{with initrd}
-install -d $RPM_BUILD_ROOT/usr/{{%{_lib},include}/klibc,%{_target_cpu}-linux-uclibc/usr/{lib,include}}
-install initrd-dmsetup $RPM_BUILD_ROOT%{_sbindir}
-install initrd-libdevmapper-klibc.a $RPM_BUILD_ROOT/usr/%{_lib}/klibc/libdevmapper.a
-install include/libdevmapper.h $RPM_BUILD_ROOT/usr/include/klibc
-%if %{with uclibc}
-install initrd-libdevmapper-uclibc.a $RPM_BUILD_ROOT/usr/%{_target_cpu}-linux-uclibc/usr/lib/libdevmapper.a
-install include/libdevmapper.h $RPM_BUILD_ROOT/usr/%{_target_cpu}-linux-uclibc/usr/include
-%endif
-%endif
+install libdevmapper.a $RPM_BUILD_ROOT%{_libdir}
+%{?with_initrd:install initrd-dmsetup $RPM_BUILD_ROOT%{_sbindir}}
+%{?with_initrd:install initrd-libdevmapper.a $RPM_BUILD_ROOT/usr/%{_lib}/klibc/libdevmapper.a}
+%{?with_initrd:install include/libdevmapper.h $RPM_BUILD_ROOT/usr/include/klibc}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -234,25 +175,19 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc INTRO INSTALL README
-%attr(755,root,root) %{_sbindir}/dmeventd
+%doc INTRO INSTALL README scripts/*
 %attr(755,root,root) %{_sbindir}/dmsetup
-%attr(755,root,root) /%{_lib}/libdevmapper.so.*.*
-%attr(755,root,root) /%{_lib}/libdevmapper-event.so.*.*
-%{_mandir}/man8/dmsetup.8*
+%attr(755,root,root) /%{_lib}/lib*.so.*.*
+%{_mandir}/man8/*
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libdevmapper.so
-%attr(755,root,root) %{_libdir}/libdevmapper-event.so
-%{_includedir}/libdevmapper*.h
-%{_pkgconfigdir}/devmapper.pc
-%{_pkgconfigdir}/devmapper-event.pc
+%{_includedir}/*.h
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/libdevmapper.a
-%{_libdir}/libdevmapper-event.a
+%{_libdir}/lib*.a
 
 %files scripts
 %defattr(644,root,root,755)
@@ -266,10 +201,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files initrd-devel
 %defattr(644,root,root,755)
-%{_prefix}/%{_lib}/klibc/libdevmapper.a
-%{_includedir}/klibc/libdevmapper.h
-%if %{with uclibc}
-%{_prefix}/%{_target_cpu}-linux-uclibc/usr/lib/libdevmapper.a
-%{_prefix}/%{_target_cpu}-linux-uclibc/usr/include/libdevmapper.h
-%endif
+/usr/%{_lib}/klibc/libdevmapper.a
+/usr/include/klibc/libdevmapper.h
 %endif
