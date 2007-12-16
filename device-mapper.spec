@@ -1,5 +1,3 @@
-# TODO
-# - add fix to drop BuildConflicts:	device-mapper-initrd-devel
 #
 # Conditional build:
 %bcond_without	selinux		# build without SELinux support
@@ -13,12 +11,12 @@
 Summary:	Userspace support for the device-mapper
 Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika
 Name:		device-mapper
-Version:	1.02.22
-Release:	3
+Version:	1.02.23
+Release:	1
 License:	LGPL v2.1 (library), GPL v2 (executables)
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
-# Source0-md5:	6b94db57cdc9022af1583b3f2acb91cd
+# Source0-md5:	d2d5d8b5383d80652d4066092d6f85e8
 # http://www.redhat.com/archives/dm-devel/2005-March/msg00022.html
 Patch0:		%{name}-disable_dynamic_link.patch
 Patch1:		%{name}-klibc.patch
@@ -30,13 +28,11 @@ Patch6:		%{name}-dmsetup-export.patch
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{?with_initrd:BuildRequires:	klibc-static >= 1.3.22}
+%{?with_initrd:BuildRequires:	klibc-static >= 1.5-2}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.10}
 %if %{with initrd} && %{with uclibc}
 BuildRequires:	uClibc-static >= 0.9.26
 %endif
-# /usr/include/klibc/libdevmapper.h is included first before currently built version with klcc
-BuildConflicts:	device-mapper-initrd-devel < 1.02.17
 %{?with_selinux:Requires:	libselinux >= 1.10}
 Conflicts:	dev < 2.9.0-8
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -146,7 +142,7 @@ cp -f /usr/share/automake/config.sub autoconf
 %{__autoconf}
 
 %if %{with initrd}
-# kcc
+# klibc
 %configure \
 	CC="klcc -static" \
 	CLDFLAGS="%{rpmldflags}" \
