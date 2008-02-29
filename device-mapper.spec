@@ -16,6 +16,7 @@ Patch0:		%{name}-stack.patch
 # http://www.redhat.com/archives/dm-devel/2005-March/msg00022.html
 Patch1:		%{name}-disable_dynamic_link.patch
 Patch2:		%{name}-klibc.patch
+Patch3:		%{name}-pkgconfig.patch
 URL:		http://sources.redhat.com/dm/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -114,6 +115,7 @@ Dodatkowe skrypty.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 cp -f /usr/share/automake/config.sub autoconf
