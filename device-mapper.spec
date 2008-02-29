@@ -27,6 +27,7 @@ BuildRequires:	automake
 Conflicts:	dev < 2.9.0-8
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		filterout_ld	-Wl,--as-needed
 %define		_sbindir	/sbin
 
 %description
