@@ -31,7 +31,7 @@ BuildRequires:	automake
 %{?with_initrd:BuildRequires:	klibc-static >= 1.5-2}
 %{?with_selinux:BuildRequires:	libselinux-devel >= 1.10}
 %if %{with initrd} && %{with uclibc}
-BuildRequires:	uClibc-static >= 0.9.26
+BuildRequires:	uClibc-static >= 2:0.9.26
 %endif
 %{?with_selinux:Requires:	libselinux >= 1.10}
 Conflicts:	dev < 2.9.0-8
