@@ -18,9 +18,8 @@ diff -durN -x '*~' device-mapper.1.01.03.orig/configure.in device-mapper.1.01.03
  AC_SUBST(OWNER)
  AC_SUBST(GROUP)
  AC_SUBST(LIBS)
-diff -durN -x '*~' device-mapper.1.01.03.orig/dmsetup/Makefile.in device-mapper.1.01.03/dmsetup/Makefile.in
---- device-mapper.1.01.03.orig/dmsetup/Makefile.in	2005-01-27 17:16:52.000000000 +0100
-+++ device-mapper.1.01.03/dmsetup/Makefile.in	2005-07-31 19:10:13.000000000 +0200
+--- device-mapper.1.02.23/dmsetup/Makefile.in.orig	2007-08-21 22:32:30.000000000 +0200
++++ device-mapper.1.02.23/dmsetup/Makefile.in	2007-12-16 23:07:07.095562047 +0100
 @@ -16,8 +16,10 @@
  top_srcdir = @top_srcdir@
  VPATH = @srcdir@
@@ -29,9 +28,9 @@ diff -durN -x '*~' device-mapper.1.01.03.orig/dmsetup/Makefile.in device-mapper.
  TARGETS = dmsetup
  INSTALL_TYPE = install_dynamic
 +endif
+ LIB_PTHREAD = @LIB_PTHREAD@
  
  ifeq ("@STATIC_LINK@", "yes")
-   TARGETS += dmsetup.static
 diff -durN -x '*~' device-mapper.1.01.03.orig/lib/Makefile.in device-mapper.1.01.03/lib/Makefile.in
 --- device-mapper.1.01.03.orig/lib/Makefile.in	2005-04-28 00:32:00.000000000 +0200
 +++ device-mapper.1.01.03/lib/Makefile.in	2005-07-31 19:10:13.000000000 +0200
@@ -45,3 +44,17 @@ diff -durN -x '*~' device-mapper.1.01.03.orig/lib/Makefile.in device-mapper.1.01
  
  ifeq ("@STATIC_LINK@", "yes")
    INSTALL_TYPE += install_static
+--- device-mapper.1.02.23/make.tmpl.in.orig	2007-10-03 12:48:27.000000000 +0200
++++ device-mapper.1.02.23/make.tmpl.in	2007-12-16 23:06:42.922184485 +0100
+@@ -123,7 +123,11 @@
+ .PHONY: $(SUBDIRS) $(SUBDIRS.install) $(SUBDIRS.clean) $(SUBDIRS.distclean)
+ .PHONY: $(SUBDIRS.pofile)
+ 
++ifeq ("@DYNAMIC_LINK@", "yes")
+ TARGETS += $(LIB_SHARED) $(LIB_STATIC) $(VERSIONED_SHLIB)
++else
++TARGETS += $(LIB_STATIC)
++endif
+ 
+ all: $(SUBDIRS) $(TARGETS)
+ 
