@@ -12,7 +12,7 @@ Summary:	Userspace support for the device-mapper
 Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika
 Name:		device-mapper
 Version:	1.02.25
-Release:	1
+Release:	2
 License:	LGPL v2.1 (library), GPL v2 (executables)
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
@@ -76,6 +76,10 @@ Summary(pl.UTF-8):	Pliki nagłówkowe i dokumentacja do %{name}
 License:	LGPL v2.1
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+%if %{with selinux}
+Requires:	libselinux-devel
+Requires:	libsepol-devel
+%endif
 
 %description devel
 Header files and development documentation for %{name}.
