@@ -11,17 +11,15 @@
 Summary:	Userspace support for the device-mapper
 Summary(pl.UTF-8):	Wsparcie dla mapowania urządzeń w przestrzeni użytkownika
 Name:		device-mapper
-Version:	1.02.25
-Release:	2
+Version:	1.02.27
+Release:	1
 License:	LGPL v2.1 (library), GPL v2 (executables)
 Group:		Applications/System
 Source0:	ftp://sources.redhat.com/pub/dm/%{name}.%{version}.tgz
-# Source0-md5:	bf0aa12fc69014b578f432b78cd5a927
+# Source0-md5:	6074f2c2035c2a526422e691c7457277
 # http://www.redhat.com/archives/dm-devel/2005-March/msg00022.html
-Patch0:		%{name}-disable_dynamic_link.patch
 Patch1:		%{name}-klibc.patch
 Patch2:		%{name}-getopt.patch
-Patch3:		%{name}-ac.patch
 Patch4:		%{name}-force-local-headers.patch
 Patch5:		%{name}-linking.patch
 Patch6:		%{name}-dmsetup-export.patch
@@ -132,10 +130,8 @@ Dodatkowe skrypty.
 
 %prep
 %setup -q -n %{name}.%{version}
-%patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
@@ -151,7 +147,6 @@ cp -f /usr/share/automake/config.sub autoconf
 	CC="klcc -static" \
 	CLDFLAGS="%{rpmldflags}" \
 	--disable-selinux \
-	--disable-dynamic_link \
 	--enable-static_link \
 	--with-optimisation="%{rpmcflags}" \
 	--with-user=%(id -u) \
@@ -175,7 +170,6 @@ cp -a lib/ioctl/libdevmapper.a initrd-libdevmapper-klibc.a
 	CC="%{_target_cpu}-uclibc-gcc" \
 	CLDFLAGS="%{rpmldflags}" \
 	--disable-selinux \
-	--disable-dynamic_link \
 	--with-optimisation="-Os" \
 	--with-interface=ioctl \
 	--disable-nls
