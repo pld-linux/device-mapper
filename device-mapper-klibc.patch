@@ -1,14 +1,25 @@
+--- device-mapper/configure.in~	2008-07-06 19:22:49.965050005 +0200
++++ device-mapper/configure.in	2008-07-06 19:26:11.998363857 +0200
+@@ -107,7 +107,7 @@
+ 
+ ################################################################################
+ dnl -- Check for functions
+-AC_CHECK_FUNCS([gethostname getpagesize memset mkdir rmdir munmap setlocale \
++AC_CHECK_FUNCS([gethostname memset mkdir rmdir munmap \
+   strcasecmp strchr strdup strncasecmp strerror strrchr strstr strtol strtoul \
+   uname], , [AC_MSG_ERROR(bailing out)])
+ AC_FUNC_ALLOCA
 --- device-mapper.1.02.09.orig/configure.in	2006-09-27 18:22:22.000000000 +0000
 +++ device-mapper.1.02.09.klibc/configure.in	2006-09-27 18:22:22.000000000 +0000
-@@ -69,7 +69,7 @@
- AC_HEADER_STDC
+@@ -87,7 +87,7 @@
+ AC_HEADER_SYS_WAIT
  AC_HEADER_TIME
  
--AC_CHECK_HEADERS(ctype.h dirent.h errno.h fcntl.h getopt.h inttypes.h limits.h stdarg.h stdio.h stdlib.h string.h sys/ioctl.h sys/param.h sys/stat.h sys/types.h unistd.h,,AC_MSG_ERROR(bailing out))
-+AC_CHECK_HEADERS(ctype.h dirent.h errno.h fcntl.h inttypes.h limits.h stdarg.h stdio.h stdlib.h string.h sys/ioctl.h sys/param.h sys/stat.h sys/types.h unistd.h,,AC_MSG_ERROR(bailing out))
- 
- AC_CHECK_HEADERS(termios.h)
- ################################################################################
+-AC_CHECK_HEADERS([ctype.h dirent.h errno.h fcntl.h getopt.h inttypes.h limits.h \
++AC_CHECK_HEADERS([ctype.h dirent.h errno.h fcntl.h inttypes.h limits.h \
+   stdarg.h stdio.h stdlib.h string.h sys/ioctl.h sys/param.h sys/stat.h \
+   sys/types.h unistd.h], , [AC_MSG_ERROR(bailing out)])
+ AC_CHECK_HEADERS(termios.h sys/statvfs.h)
 --- device-mapper.1.02.09.orig/dmsetup/dmsetup.c	2006-08-10 20:53:21.000000000 +0000
 +++ device-mapper.1.02.09.klibc/dmsetup/dmsetup.c	2006-09-27 18:22:58.000000000 +0000
 @@ -31,12 +31,13 @@

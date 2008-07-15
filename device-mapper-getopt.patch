@@ -1,14 +1,16 @@
 --- device-mapper.1.02.07/configure.in.orig	2006-05-17 19:23:21.778894500 +0200
 +++ device-mapper.1.02.07/configure.in	2006-05-17 19:31:56.351053250 +0200
-@@ -209,7 +209,7 @@
+@@ -230,8 +230,8 @@
  ################################################################################
  dnl -- getline included in recent libc
  
--AC_CHECK_LIB(c, getline, AC_DEFINE([HAVE_GETLINE], 1, [Define to 1 if getline is available.]))
-+AC_CHECK_FUNC(getline, [AC_DEFINE([HAVE_GETLINE], 1, [Define to 1 if getline is available.])])
+-AC_CHECK_LIB(c, getline, AC_DEFINE([HAVE_GETLINE], 1,
+-  [Define to 1 if getline is available.]))
++AC_CHECK_FUNC(getline, [AC_DEFINE([HAVE_GETLINE], 1,
++  [Define to 1 if getline is available.])])
  
  ################################################################################
- dnl -- Disable selinux
+ dnl -- canonicalize_file_name included in recent libc
 @@ -240,7 +240,7 @@
  
  ################################################################################

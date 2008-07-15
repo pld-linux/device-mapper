@@ -1,23 +1,31 @@
 diff -durN -x '*~' device-mapper.1.01.03.orig/configure.in device-mapper.1.01.03/configure.in
 --- device-mapper.1.01.03.orig/configure.in	2005-06-13 16:07:29.000000000 +0200
 +++ device-mapper.1.01.03/configure.in	2005-07-31 19:10:30.000000000 +0200
-@@ -178,6 +178,8 @@
- dnl -- Enables staticly-linked tools
- AC_ARG_ENABLE(static_link, [  --enable-static_link    Use this to link the tools to their libraries
-                           statically.  Default is dynamic linking],  STATIC_LINK=$enableval, STATIC_LINK=no)
-+AC_ARG_ENABLE(dynamic_link, [  --disable-dynamic_link    Use this not to link the tools to their libraries
-+                          statically.  Default is dynamic linking],  DYNAMIC_LINK=$enableval, DYNAMIC_LINK=yes)
+@@ -249,7 +249,15 @@
+   STATIC_LINK=$enableval, STATIC_LINK=no)
+ AC_MSG_RESULT($STATIC_LINK)
  
- ################################################################################
- dnl -- Clear default exec_prefix - install into /sbin rather than /usr/sbin
-@@ -324,6 +326,7 @@
- ################################################################################
- AC_SUBST(JOBS)
+-################################################################################
++#
++AC_MSG_CHECKING(whether to use dynamic linking)
++AC_ARG_ENABLE(dynamic_link,
++  [  --enable-dynamic_link    Use this to not link the tools to their libraries
++                          statically.  Default is dynamic linking],
++  DYNAMIC_LINK=$enableval, DYNAMIC_LINK=no)
++AC_MSG_RESULT($DYNAMIC_LINK)
++
++###############################################################################
+ dnl -- Disable selinux
+ AC_MSG_CHECKING(whether to enable selinux support)
+ AC_ARG_ENABLE(selinux, [  --disable-selinux       Disable selinux support],
+@@ -496,6 +496,7 @@
+ AC_SUBST(SNAPSHOTS)
+ AC_SUBST(STATICDIR)
  AC_SUBST(STATIC_LINK)
 +AC_SUBST(DYNAMIC_LINK)
- AC_SUBST(OWNER)
- AC_SUBST(GROUP)
- AC_SUBST(LIBS)
+ AC_SUBST([LIB_PTHREAD])
+ AC_SUBST(interface)
+ AC_SUBST(kerneldir)
 --- device-mapper.1.02.23/dmsetup/Makefile.in.orig	2007-08-21 22:32:30.000000000 +0200
 +++ device-mapper.1.02.23/dmsetup/Makefile.in	2007-12-16 23:07:07.095562047 +0100
 @@ -16,8 +16,10 @@
